@@ -7,7 +7,7 @@ from models.review import Review
 from models.state import State
 from models.user import User
 from os import getenv
-from sqlalchemy import create_engine
+from sqlalchemy import (create_engine, func)
 from sqlalchemy.orm import (sessionmaker, scoped_session)
 """
 This is the db_storage module.
@@ -108,4 +108,26 @@ class DBStorage:
         Return:
            object of cls and id passed in argument
         """
-        pass
+        if cls not in self.__models_available:
+            return None
+        return self.__session.query(
+            self.__models_available[cls]).filter_by(id=id_).one()
+
+    def count(self, cls=None):
+        """
+        Number of objects in a certain class
+
+        Arguments:
+            cls: String representing a class name (default None)
+
+        Return:
+            number of objects in that class or total
+        """
+        if cls is None:
+            total = 0
+            for v in self.__models_available.values():
+                total += self.__session.query(v).count()
+            return total
+        if cls in self.__models_available.keys():
+            return self.__session.query(self.__models_available[cls]).count()
+        return -1

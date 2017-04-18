@@ -116,4 +116,26 @@ class FileStorage:
         Return:
            object of cls and id passed in argument
         """
-        pass
+        if not cls in self.__models_available:
+            return None
+        all_objs = self.all(cls)
+        for k in all_objs.keys():
+            if k == id_:
+                return all_objs[k]
+        return None
+
+    def count(self, cls=None):
+        """
+        Number of objects in a certain class
+
+        Arguments:
+            cls: String representing a class name (default None)
+
+        Return:
+            number of objects in that class or total
+        """
+        if cls is None:
+            return len(self.__objects)
+        if cls in self.__models_available:
+            return len(self.all(cls))
+        return -1
