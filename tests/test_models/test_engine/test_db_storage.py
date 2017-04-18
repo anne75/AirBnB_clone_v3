@@ -1,12 +1,12 @@
-import unittest
-import os.path
-from os import getenv
 from datetime import datetime
-from models.base_model import Base
+from models import *
 from models.amenity import Amenity
+from models.base_model import Base
 from models.engine.db_storage import DBStorage
 from models.state import State
-from models import *
+import os.path
+from os import getenv
+import unittest
 
 
 @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE', 'fs') != 'db', "db")
@@ -69,5 +69,64 @@ class Test_DBStorage(unittest.TestCase):
         for value in self.store.all().values():
             self.assertIsInstance(value.created_at, datetime)
 
+    def test_state(self):
+        """test State creation with an argument"""
+        a = State(name="Kamchatka", id="Kamchatka666")
+        a.save()
+        self.store.reload()
+        self.assertIn("Kamchatka666", self.store.all("State").keys())
+
+    def test_count(self):
+        """test count all"""
+        test_len = len(self.store.all())
+        a = Amenity(name="test_amenity")
+        a.save()
+        self.store.reload()
+        self.assertEqual(test_len + 1, self.store.count())
+
+    def test_count_arg(self):
+        """test count with an argument"""
+        test_len = len(self.store.all("Amenity"))
+        a = Amenity(name="test_amenity_2")
+        a.save()
+        self.store.reload()
+        self.assertEqual(test_len + 1, self.store.count("Amenity"))
+
+    def test_count_bad_arg(self):
+        """test count with dummy class name"""
+        self.assertEqual(-1, self.store.count("Dummy"))
+
+    def test_get(self):
+        """test get with valid cls and id"""
+        a = Amenity(name="test_amenity3", id="test_3")
+        a.save()
+        self.store.reload()
+        result = self.store.get("Amenity", "test_3")
+        self.assertEqual(a.name, result.name)
+        # does not work as the database loses last argument tzinfo for datetime
+        # self.assertEqual(a.created_at, result.created_at)
+        self.assertEqual(a.created_at.year, result.created_at.year)
+        self.assertEqual(a.created_at.month, result.created_at.month)
+        self.assertEqual(a.created_at.day, result.created_at.day)
+        self.assertEqual(a.created_at.hour, result.created_at.hour)
+        self.assertEqual(a.created_at.minute, result.created_at.minute)
+        self.assertEqual(a.created_at.second, result.created_at.second)
+
+    def test_get_bad_cls(self):
+        """test get with invalid cls"""
+        result = self.store.get("Dummy", "test")
+        self.assertIsNone(result)
+
+    def test_get_bad_id(self):
+        """test get with invalid id"""
+        result = self.store.get("State", "very_bad_id")
+        self.assertIsNone(result)
+
+
 if __name__ == "__main__":
+    import sys
+    import os
+    sys.path.insert(1, os.path.join(os.path.split(__file__)[0], '../../..'))
+    from models import *
+    from models.engine.file_storage import FileStorage
     unittest.main()

@@ -116,7 +116,7 @@ class FileStorage:
         Return:
            object of cls and id passed in argument
         """
-        if not cls in self.__models_available:
+        if cls not in self.__models_available.keys():
             return None
         all_objs = self.all(cls)
         for k in all_objs.keys():
@@ -132,7 +132,8 @@ class FileStorage:
             cls: String representing a class name (default None)
 
         Return:
-            number of objects in that class or total
+            number of objects in that class or in total.
+            -1 if the class is not valid
         """
         if cls is None:
             return len(self.__objects)
