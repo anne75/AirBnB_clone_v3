@@ -8,7 +8,7 @@ The purpose of this project is to recreate the AirBnB site, from the back-end da
 Build an API.
 
 <h4>second phase</h4>
-Command line interpretor can now save objects into a mysql database by setting the following environmental variables. The database schema is [here](https://s3.amazonaws.com/intranet-projects-files/holbertonschool-higher-level_programming+/289/AirBnb_DB_diagramm.jpg).
+Command line interpretor can now save objects into a mysql database by setting the following environmental variables. The database schema is [here](https://s3.amazonaws.com/intranet-projects-files/holbertonschool-higher-level_programming+/289/AirBnb_DB_diagramm.jpg).  
 
 * MySQL user = <HBNB_MYSQL_USER>
 * MySQL password = <HBNB_MYSQL_PWD>
