@@ -1,23 +1,35 @@
 #!/usr/bin/python3
-from models.base_model import Base
-from sqlalchemy import create_engine
-from sqlalchemy.orm import (sessionmaker, scoped_session)
-from os import getenv
-from models.user import User
 from models.amenity import Amenity
+from models.base_model import Base
 from models.city import City
 from models.place import Place
 from models.review import Review
 from models.state import State
+from models.user import User
+from os import getenv
+from sqlalchemy import create_engine
+from sqlalchemy.orm import (sessionmaker, scoped_session)
 """
-This is the db_storage module
+This is the db_storage module.
+This module deals with storing and retrieving data from a mysql database.
+This module contains one class DBStorage.
 """
 
 
 class DBStorage:
+    """
+    class DBStorage
+    Save and retrieve data from a MySQL database using sqlAlchemy ORM
+
+    class attributes:
+       __engine: sqlAlchemy engine
+       __session: MySQL session
+
+    instance attributes:
+       __models_available: dictionary of <string> <class>
+    """
     __engine = None
     __session = None
-    __Session = None
 
     def __init__(self):
         """
@@ -76,10 +88,24 @@ class DBStorage:
         be in the init method
         """
         Base.metadata.create_all(self.__engine)
-        self.__session = scoped_session(sessionmaker(bind=self.__engine))
+        self.__session = scoped_session(sessionmaker(bind=self.__engine,
+                                                     expire_on_commit=False))
 
     def close(self):
         """
         close a session
         """
         self.__session.remove()
+
+    def get(self, cls, id_):
+        """
+        Retrieve one object
+
+        Arguments:
+            cls: string representing a class name
+            id_: string representing the object id
+
+        Return:
+           object of cls and id passed in argument
+        """
+        pass
