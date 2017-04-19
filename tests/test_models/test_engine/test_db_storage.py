@@ -16,7 +16,8 @@ class Test_DBStorage(unittest.TestCase):
     """
     @classmethod
     def setUpClass(cls):
-        """create a session"""
+        """We cannot create a new session as everything depends on storage in
+        init"""
         test_args = {'updated_at': datetime(2017, 2, 12, 00, 31, 53, 331997),
                      'id': "0234",
                      'created_at': datetime(2017, 2, 12, 00, 31, 53, 331900),
@@ -91,18 +92,29 @@ class Test_DBStorage(unittest.TestCase):
         storage.delete(b)
         self.assertEqual(test_len + 1, storage.count())
 
-    def test_count_arg(self):
+    def test_count_amenity(self):
         """test count with an argument"""
         test_len = len(storage.all("Amenity"))
         a = Amenity(name="test_amenity_2")
         a.save()
         self.assertEqual(test_len + 1, storage.count("Amenity"))
+        storage.delete(a)
+        self.assertEqual(test_len, storage.count("Amenity"))
+
+    def test_count_state(self):
+        """test count with an argument"""
+        test_len = len(storage.all("State"))
+        a = State(name="test_state_count_arg")
+        a.save()
+        self.assertEqual(test_len + 1, storage.count("State"))
+        storage.delete(a)
+        self.assertEqual(test_len, storage.count("State"))
 
     def test_count_bad_arg(self):
         """test count with dummy class name"""
         self.assertEqual(-1, storage.count("Dummy"))
 
-    def test_get(self):
+    def test_get_amenity(self):
         """test get with valid cls and id"""
         a = Amenity(name="test_amenity3", id="test_3")
         a.save()
@@ -118,6 +130,24 @@ class Test_DBStorage(unittest.TestCase):
         self.assertEqual(a.created_at.second, result.created_at.second)
         storage.delete(a)
         result = storage.get("Amenity", "test_3")
+        self.assertIsNone(result)
+
+    def test_get_state(self):
+        """test get with valid cls and id"""
+        a = State(name="test_state3", id="test_3")
+        a.save()
+        result = storage.get("State", "test_3")
+        self.assertEqual(a.name, result.name)
+        # does not work as the database loses last argument tzinfo for datetime
+        # self.assertEqual(a.created_at, result.created_at)
+        self.assertEqual(a.created_at.year, result.created_at.year)
+        self.assertEqual(a.created_at.month, result.created_at.month)
+        self.assertEqual(a.created_at.day, result.created_at.day)
+        self.assertEqual(a.created_at.hour, result.created_at.hour)
+        self.assertEqual(a.created_at.minute, result.created_at.minute)
+        self.assertEqual(a.created_at.second, result.created_at.second)
+        storage.delete(a)
+        result = storage.get("State", "test_3")
         self.assertIsNone(result)
 
     def test_get_bad_cls(self):
