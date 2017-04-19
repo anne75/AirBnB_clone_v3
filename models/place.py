@@ -33,10 +33,10 @@ class Place(BaseModel, Base):
     if getenv('HBNB_TYPE_STORAGE', 'fs') == 'db':
         __tablename__ = "places"
         city_id = Column(String(60),
-                         ForeignKey('cities.id', ondelete="CASCADE"),
+                         ForeignKey('cities.id'),
                          nullable=False)
         user_id = Column(String(60),
-                         ForeignKey('users.id', ondelete="CASCADE"),
+                         ForeignKey('users.id'),
                          nullable=False)
         name = Column(String(128), nullable=False)
         description = Column(String(1024), nullable=True)
@@ -48,9 +48,9 @@ class Place(BaseModel, Base):
         longitude = Column(Float, nullable=True)
         amenities = relationship("Amenity", secondary="place_amenity",
                                  viewonly=True)
-        place_amenities = relationship("PlaceAmenity", backref="places",
+        place_amenities = relationship("PlaceAmenity", backref="place",
                               cascade="all, delete, delete-orphan")
-        reviews = relationship("Review", backref="places",
+        reviews = relationship("Review", backref="place",
                               cascade="all, delete, delete-orphan")
     else:
         city_id = ""

@@ -116,7 +116,7 @@ class FileStorage:
         Return:
            object of cls and id passed in argument
         """
-        if cls not in self.__models_available.keys():
+        if (cls not in self.__models_available.keys()) or (id_ is None):
             return None
         all_objs = self.all(cls)
         for k in all_objs.keys():
