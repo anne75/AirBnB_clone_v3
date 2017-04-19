@@ -3,6 +3,7 @@
 creates the Blueprint for flask application
 """
 from flask import Blueprint
+from models import storage
 
 app_views = Blueprint("app_views", __name__, url_prefix="/api/v1")
 
