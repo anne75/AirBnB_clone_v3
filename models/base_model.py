@@ -106,4 +106,4 @@ class BaseModel:
 ##            if name in self.__dict__.keys()
 ## and self.__dict__[name] is not None:
 ##                return
-##        self.__dict__[name] = value
+##        object.__setattr__(self, name, value):
