@@ -52,8 +52,6 @@ class Test_DBStorage(unittest.TestCase):
         a = Amenity(name="another")
         a.save()
         self.assertEqual(len(storage.all()), test_len + 1)
-        all_amenities = storage.all("Amenity")
-        self.assertIn(a.id, all_amenities.keys())
         b = State(name="california")
         self.assertNotEqual(len(storage.all()), test_len + 2)
         b.save()
