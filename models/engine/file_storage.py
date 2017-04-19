@@ -5,15 +5,15 @@ This is module file_storage
 This module defines one class FileStorage.
 This class hadles saving the information in json in a file
 """
-import json
 from datetime import datetime
-from models.base_model import BaseModel
-from models.user import User
+import json
 from models.amenity import Amenity
+from models.base_model import BaseModel
 from models.city import City
 from models.place import Place
 from models.review import Review
 from models.state import State
+from models.user import User
 # from models import storage
 import os
 
@@ -104,3 +104,39 @@ class FileStorage:
     def close(self):
         """Close a session"""
         self.reload()
+
+    def get(self, cls, id_):
+        """
+        Retrieve one object
+
+        Arguments:
+            cls: string representing a class name
+            id_: string representing the object id
+
+        Return:
+           object of cls and id passed in argument
+        """
+        if cls not in self.__models_available.keys():
+            return None
+        all_objs = self.all(cls)
+        for k in all_objs.keys():
+            if k == id_:
+                return all_objs[k]
+        return None
+
+    def count(self, cls=None):
+        """
+        Number of objects in a certain class
+
+        Arguments:
+            cls: String representing a class name (default None)
+
+        Return:
+            number of objects in that class or in total.
+            -1 if the class is not valid
+        """
+        if cls is None:
+            return len(self.__objects)
+        if cls in self.__models_available:
+            return len(self.all(cls))
+        return -1
