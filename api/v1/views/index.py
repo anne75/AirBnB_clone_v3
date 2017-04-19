@@ -5,6 +5,7 @@ from flask import jsonify
 Index model holds the endpoint (route)
 """
 
+
 @app_views.route('/status')
 def status():
     """ returns status as 'ok' """
