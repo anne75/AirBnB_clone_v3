@@ -21,12 +21,12 @@ class DBStorage:
     class DBStorage
     Save and retrieve data from a MySQL database using sqlAlchemy ORM
 
-    class attributes:
-       __engine: sqlAlchemy engine
-       __session: MySQL session
+    **class attributes**
+       __engine: private, sqlAlchemy engine
+       __session: private, MySQL session
 
     instance attributes:
-       __models_available: dictionary of <string> <class>
+       __models_available: private, dictionary of <string> <class>
     """
     __engine = None
     __session = None
@@ -39,7 +39,7 @@ class DBStorage:
             getenv('HBNB_MYSQL_USER'),
             getenv('HBNB_MYSQL_PWD'),
             getenv('HBNB_MYSQL_HOST'),
-            getenv('HBNB_MYSQL_DB')))
+            getenv('HBNB_MYSQL_DB')))  # adding, echo=True) shows SQL statements
         self.__models_available = {"User": User,
                                    "Amenity": Amenity, "City": City,
                                    "Place": Place, "Review": Review,
@@ -103,25 +103,26 @@ class DBStorage:
 
         Arguments:
             cls: string representing a class name
-            id_: string representing the object id
+            id_: string representing the object id, primary key
 
         Return:
-           object of cls and id passed in argument
+           object of cls and id passed in argument or None
         """
         if cls not in self.__models_available:
             return None
         return self.__session.query(
-            self.__models_available[cls]).filter_by(id=id_).one()
+                self.__models_available[cls]).get(id_)
 
     def count(self, cls=None):
         """
         Number of objects in a certain class
 
         Arguments:
-            cls: String representing a class name (default None)
+            cls: optional, string representing a class name (default None)
 
         Return:
-            number of objects in that class or total
+            number of objects in that class or in total
+            -1 if the argument is not valid
         """
         if cls is None:
             total = 0
