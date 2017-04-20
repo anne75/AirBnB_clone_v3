@@ -109,7 +109,7 @@ class DBStorage:
         Return:
            object of cls and id passed in argument or None
         """
-        if cls not in self.__models_available:
+        if (cls not in self.__models_available) or (id_ is None):
             return None
         return self.__session.query(
                 self.__models_available[cls]).get(id_)
