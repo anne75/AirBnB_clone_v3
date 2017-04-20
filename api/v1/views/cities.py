@@ -46,7 +46,6 @@ def delete_one_city(city_id):
 @app_views.route("/states/<state_id>/cities", methods=["POST"])
 def create_one_city(state_id):
     try:
-        print(request)
         r = request.get_json()
     except:
         return "Not a JSON", 400
