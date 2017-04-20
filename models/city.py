@@ -29,3 +29,13 @@ class City(BaseModel, Base):
         Initializes from BaseModel
         """
         super().__init__(*args, **kwargs)
+
+    if getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
+        @property
+        def places(self):
+            """
+            returns all places in a City
+            """
+            all_places = models.storage.all("Place").values()
+            result = [place for place in all_places if place.city_id == self.id]
+            return result

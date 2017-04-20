@@ -12,7 +12,7 @@ def state_all_cities(state_id):
     Returns all the cities of a state or raise 404 error
     """
     state = storage.get("State", state_id)
-    if states is None:
+    if state is None:
         abort(404)
     all_cities = [city.to_json() for city in state.cities]
     return jsonify(all_cities)
@@ -36,7 +36,7 @@ def delete_one_city(city_id):
 
     returns: 200 and {} if success, 404 otherwise
     """
-    city = storage.get("City" city_if)
+    city = storage.get("City", city_id)
     if city is None:
         abort(404)
     storage.delete(city)
@@ -51,4 +51,3 @@ def post_one_city(state_id):
         return "Not a JSON", 400
     if 'name' not in r.keys():
         return "Missing name", 400
-    
