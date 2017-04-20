@@ -2,7 +2,7 @@
 """
 Contains
 """
-from api.v1.views import (app_views, storage)
+from api.v1.views import (app_views, City, storage)
 from flask import (abort, jsonify)
 
 
@@ -12,7 +12,7 @@ def state_all_cities(state_id):
     Returns all the cities of a state or raise 404 error
     """
     state = storage.get("State", state_id)
-    if states is None:
+    if state is None:
         abort(404)
     all_cities = [city.to_json() for city in state.cities]
     return jsonify(all_cities)
@@ -36,7 +36,7 @@ def delete_one_city(city_id):
 
     returns: 200 and {} if success, 404 otherwise
     """
-    city = storage.get("City" city_if)
+    city = storage.get("City", city_id)
     if city is None:
         abort(404)
     storage.delete(city)
@@ -44,11 +44,30 @@ def delete_one_city(city_id):
 
 
 @app_views.route("/states/<state_id>/cities", methods=["POST"])
-def post_one_city(state_id):
+def create_one_city(state_id):
     try:
         r = request.get_json()
     except:
         return "Not a JSON", 400
     if 'name' not in r.keys():
         return "Missing name", 400
-    
+    # creates the dictionary r as kwargs to create a city object
+    c = City(**r)
+    return jsonify(c.to_json()), 201
+
+
+@app_views.route("/cities/<city_id>", methods=["PUTS"])
+def update_one_city(city_id):
+    city = storage.get("City", city_id)
+    if city is None:
+        abort(404)
+    try:
+        r= request.get_json()
+    except:
+        return "Not a JSON", 400
+    for k in ("id", "created_at", "updated_at", "state_id"):
+        r.pop(k, None)
+    for k, v in r.items:
+        setattr(city, k, v)
+    city.save()
+    return jsonify(city.to_json()), 200
