@@ -71,3 +71,13 @@ class Place(BaseModel, Base):
         Inherts from BaseClass
         """
         super().__init__(*args, **kwargs)
+
+    if getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
+        @property
+        def reviews(self):
+            """
+            lists all reviews for a place
+            """
+            all_reviews = models.storage.all("Review").values()
+            result = [r for r in all_reviews if r.place_id == self.id]
+            return result

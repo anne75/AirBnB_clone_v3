@@ -59,14 +59,14 @@ def create_place(city_id):
 def update_place(place_id=None):
     try:
         r = request.get_json()
-        a = storage.get("Place", place_id)
-        if a is None:
-            abort(404)
-        for k in ("id", "user_id", "city_id", "created_at", "updated_at"):
-            r.pop(k, None)
-        for k, v in r.items():
-            setattr(a, k, v)
-        a.save()
-        return jsonify(a.to_json()), 200
     except:
         return "Not a JSON", 400
+    a = storage.get("Place", place_id)
+    if a is None:
+        abort(404)
+    for k in ("id", "user_id", "city_id", "created_at", "updated_at"):
+        r.pop(k, None)
+    for k, v in r.items():
+        setattr(a, k, v)
+    a.save()
+    return jsonify(a.to_json()), 200
