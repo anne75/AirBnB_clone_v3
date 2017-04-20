@@ -55,7 +55,7 @@ def create_review(place_id):
     try:
         r = request.get_json()
     except:
-        abort(404)
+        return "Not a JSON", 400
     if "user_id" not in r.keys():
         return "Missing user_id", 400
     if "text" not in r.keys():
@@ -68,7 +68,6 @@ def create_review(place_id):
         abort(404)
     review = Review(**r)
     review.place_id = place_id
-    review.user_id = r["user_id"]
     review.save()
     return jsonify(review.to_json()), 201
 
