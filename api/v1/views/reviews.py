@@ -2,7 +2,7 @@
 from api.v1.views import (app_views, Review, storage)
 from flask import (abort, jsonify, request)
 """
-Review model hold the endpoint (route)
+Review model hold the endpoint (route) and their respective view functions
 """
 
 
