@@ -72,7 +72,7 @@ class FileStorage:
         """puts all the object to file after serializing them"""
         store = {}
         for k in FileStorage.__objects.keys():
-            store[k] = FileStorage.__objects[k].to_json()
+            store[k] = FileStorage.__objects[k].to_json(True)
         with open(FileStorage.__file_path, mode="w+", encoding="utf-8") as fd:
             fd.write(json.dumps(store))
 

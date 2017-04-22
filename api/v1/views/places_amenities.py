@@ -64,6 +64,7 @@ else:
         amenity = storage.get("Amenity", amenity_id)
         if amenity is not None:
             place.amenities.remove(amenity)
+            storage.save()
             # place.save()
         return jsonify({}), 200
 
