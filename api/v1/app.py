@@ -29,5 +29,5 @@ def teardown(exception):
 if __name__ == "__main__":
     host = getenv("HBNB_API_HOST", "0.0.0.0")
     port = getenv("HBNB_API_PORT", "5000")
-    print(app.url_map)
+#    print(app.url_map)
     app.run(host=host, port=port)

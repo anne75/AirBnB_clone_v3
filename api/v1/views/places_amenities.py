@@ -1,8 +1,8 @@
 #!/usr/bin/python3
-from api.v1.views import (app_views, Place, PlaceAmenity, storage)
+from api.v1.views import (app_views, Place, storage)
 from flask import (abort, jsonify, make_response, request)
 from os import getenv
-
+from sqlalchemy import inspect
 
 if getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
 
@@ -15,7 +15,7 @@ if getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
         result = [storage.get("Amenity", i) for i in place.amenities]
         return jsonify(result)
 
-    @app_views.route('/places/<place_id>/amenities/<amenity_id>',
+    @app_views.route('/places/<place_id>/amenities/<amenity_id>/',
                      methods=['DELETE'])
     def delete_placeamenity(place_id=None, amenity_id=None):
         """deletes an amenity"""
@@ -26,9 +26,10 @@ if getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
             for i in range(len(place.amenities)):
                 if place.amenity[i] == amenity_id:
                     place.amenity.pop(i)
+                    place.save()
         return jsonify({}), 200
 
-    @app_views.route('/places/<place_id>/amenities/<amenity_id>',
+    @app_views.route('/places/<place_id>/amenities/<amenity_id>/',
                      methods=['POST'])
     def create_amenity_in_place(place_id=None, amenity_id=None):
         """link an amenity to a place"""
@@ -41,6 +42,7 @@ if getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
         if amenity_id in [a for a in place.amenities]:
             return jsonify(amenity.to_json()), 200
         place.amenities.append(amenity_id)
+        place.save()
         return jsonify(amenity.to_json()), 201
 
 else:
@@ -54,7 +56,7 @@ else:
         result = [p.to_json() for p in place.amenities]
         return jsonify(result)
 
-    @app_views.route('/places/<place_id>/amenities/<amenity_id>',
+    @app_views.route('/places/<place_id>/amenities/<amenity_id>/',
                      methods=['DELETE'])
     def delete_placeamenity(place_id=None, amenity_id=None):
         """deletes an amenity"""
@@ -64,11 +66,11 @@ else:
         amenity = storage.get("Amenity", amenity_id)
         if amenity is not None:
             place.amenities.remove(amenity)
-            storage.save()
-            # place.save()
+            place.save()
+            return jsonify(place.amenities), 200
         return jsonify({}), 200
 
-    @app_views.route('/places/<place_id>/amenities/<amenity_id>',
+    @app_views.route('/places/<place_id>/amenities/<amenity_id>/',
                      methods=['POST'])
     def create_amenity_in_place(place_id=None, amenity_id=None):
         """link an amenity to a place"""
@@ -82,4 +84,5 @@ else:
             return jsonify(amenity.to_json()), 200
         place.amenities.append(amenity)
         place.save()
+        storage.save()
         return jsonify(amenity.to_json()), 201

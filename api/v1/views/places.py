@@ -13,7 +13,7 @@ def view_places_in_city(city_id):
     return jsonify(result)
 
 
-@app_views.route('/places/<place_id>', methods=['GET'])
+@app_views.route('/places/<place_id>/', methods=['GET'])
 def view_place(place_id=None):
     """view place"""
     s = storage.get("Place", place_id)
@@ -22,7 +22,7 @@ def view_place(place_id=None):
     return jsonify(s.to_json())
 
 
-@app_views.route('/places/<place_id>', methods=['DELETE'])
+@app_views.route('/places/<place_id>/', methods=['DELETE'])
 def delete_place(place_id=None):
     """deletes an place"""
     place = storage.get("Place", place_id)
@@ -55,7 +55,7 @@ def create_place(city_id):
     return jsonify(s.to_json()), 201
 
 
-@app_views.route('/places/<place_id>', methods=['PUT'])
+@app_views.route('/places/<place_id>/', methods=['PUT'])
 def update_place(place_id=None):
     try:
         r = request.get_json()
