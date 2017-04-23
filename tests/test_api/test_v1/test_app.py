@@ -2,29 +2,26 @@
 """
 Testing app.py file
 """
-import flask
-print("HERE")
-# import flaskr
-print("HERE")
-import unittest
-print("HERE")
-from models import storage
-print("HERE")
 from api.v1.app import app
-print("HERE")
-
-
+import flask
+import json
+from models import storage
+import unittest
 
 class TestApp(unittest.TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(self):
         app.config['TESTING'] = True
         self.app = app.test_client()
 
     def test_404(self):
         rv = self.app.get('/bad')
-        print(rv.data)
-            # self.assertIn("Not found", flask.request.data)
+        self.assertEqual(rv.status_code, 404)
+        self.assertEqual(rv.headers.get("Content-Type"), "application/json")
+        json_format = json.loads(str(rv.get_data(), encoding="utf-8"))
+        self.assertEqual(json_format.get("error"), "Not found")
+
 
 
 
