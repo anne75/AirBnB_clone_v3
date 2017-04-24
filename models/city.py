@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import models
 from models.base_model import BaseModel, Base, Table, Column, String
 from os import getenv
 from sqlalchemy import ForeignKey

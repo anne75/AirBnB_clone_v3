@@ -61,7 +61,7 @@ class TestCityView(unittest.TestCase):
         city_args = {"name": "Gaborone", "id": "GA", "state_id": "BO"}
         city = City(**city_args)
         city.save()
-        rv = self.app.get('{}/states/{}'.format(self.path, "noID"),
+        rv = self.app.get('{}/states/{}/cities'.format(self.path, "noID"),
                           follow_redirects=True)
         self.assertEqual(rv.status_code, 404)
         storage.delete(city)
@@ -213,7 +213,7 @@ class TestCityView(unittest.TestCase):
         self.assertEqual(json_format.get("state_id"), city_args["state_id"])
         storage.delete(city)
 
-    def test_update_state_bad_json(self):
+    def test_update_city_bad_json(self):
         """test update with ill formedt json"""
         city_args = {"name": "Gaborone", "id": "GA", "state_id": "BO"}
         city = City(**city_args)
