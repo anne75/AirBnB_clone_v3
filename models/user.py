@@ -35,7 +35,6 @@ class User(BaseModel, Base):
         initializes from BaseModel
         """
         value = kwargs.get("password", "")
-        print("init", kwargs, type(kwargs), value)
 #        kwargs["password"] = hashlib.md5(bytes(value.encode('utf-8')))
         super().__init__(*args, **kwargs)
 
@@ -51,7 +50,5 @@ class User(BaseModel, Base):
         Argument:
            value: password new value
         """
-        print("setter")
         b = bytes(value.encode("utf-8"))
         self.__dict__['password'] = hashlib.md5(b)
-        print(self.password)
