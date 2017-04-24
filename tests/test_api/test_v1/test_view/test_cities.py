@@ -24,7 +24,7 @@ def getJson(response):
     return json.loads(str(response.get_data(), encoding="utf-8"))
 
 
-class TestIndex(unittest.TestCase):
+class TestCityView(unittest.TestCase):
     """Test all routes in cities.py"""
 
     @classmethod

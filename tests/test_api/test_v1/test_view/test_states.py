@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-Testing app.py file
+Testing states.py file
 """
 from api.v1.app import (app)
 import flask
@@ -23,7 +23,7 @@ def getJson(response):
     return json.loads(str(response.get_data(), encoding="utf-8"))
 
 
-class TestIndex(unittest.TestCase):
+class TestStateView(unittest.TestCase):
     """Test all routes in states.py"""
 
     @classmethod

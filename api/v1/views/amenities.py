@@ -4,7 +4,7 @@ from flask import (abort, jsonify, make_response, request)
 
 
 @app_views.route('/amenities/', methods=['GET'])
-@app_views.route('/amenities/<amenity_id>', methods=['GET'])
+@app_views.route('/amenities/<amenity_id>/', methods=['GET'])
 def view_amenity(amenity_id=None):
     """view amenity"""
     if amenity_id is None:
@@ -17,7 +17,7 @@ def view_amenity(amenity_id=None):
     return jsonify(s.to_json())
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['DELETE'])
+@app_views.route('/amenities/<amenity_id>/', methods=['DELETE'])
 def delete_amenity(amenity_id=None):
     """deletes an amenity"""
     amenity = storage.get("Amenity", amenity_id)
@@ -32,27 +32,27 @@ def create_amenity():
     """create an amenity"""
     try:
         r = request.get_json()
-        if 'name' not in r.keys():
-            return "Missing name", 400
-        s = Amenity(**r)
-        s.save()
-        return jsonify(s.to_json()), 201
     except:
         return "Not a JSON", 400
+    if 'name' not in r.keys():
+        return "Missing name", 400
+    s = Amenity(**r)
+    s.save()
+    return jsonify(s.to_json()), 201
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['PUT'])
+@app_views.route('/amenities/<amenity_id>/', methods=['PUT'])
 def update_amenity(amenity_id=None):
     try:
         r = request.get_json()
-        a = storage.get("Amenity", amenity_id)
-        if a is None:
-            abort(404)
-        for k in ("id", "created_at", "updated_at"):
-            r.pop(k, None)
-        for k, v in r.items():
-            setattr(a, k, v)
-        a.save()
-        return jsonify(a.to_json()), 200
     except:
         return "Not a JSON", 400
+    a = storage.get("Amenity", amenity_id)
+    if a is None:
+        abort(404)
+    for k in ("id", "created_at", "updated_at"):
+        r.pop(k, None)
+    for k, v in r.items():
+        setattr(a, k, v)
+    a.save()
+    return jsonify(a.to_json()), 200
