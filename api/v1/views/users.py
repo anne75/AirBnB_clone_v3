@@ -4,7 +4,7 @@ from flask import (abort, jsonify, make_response, request)
 
 
 @app_views.route('/users/', methods=['GET'])
-@app_views.route('/users/<user_id>', methods=['GET'])
+@app_views.route('/users/<user_id>/', methods=['GET'])
 def view_user(user_id=None):
     """view user"""
     if user_id is None:
@@ -17,7 +17,7 @@ def view_user(user_id=None):
     return jsonify(s.to_json())
 
 
-@app_views.route('/users/<user_id>', methods=['DELETE'])
+@app_views.route('/users/<user_id>/', methods=['DELETE'])
 def delete_user(user_id=None):
     """deletes an user"""
     user = storage.get("User", user_id)
@@ -43,7 +43,7 @@ def create_user():
     return jsonify(s.to_json()), 201
 
 
-@app_views.route('/users/<user_id>', methods=['PUT'])
+@app_views.route('/users/<user_id>/', methods=['PUT'])
 def update_user(user_id=None):
     try:
         r = request.get_json()
