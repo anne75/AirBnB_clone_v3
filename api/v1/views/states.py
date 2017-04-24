@@ -21,7 +21,7 @@ def view_one_state(state_id=None):
     return jsonify(state.to_json())
 
 
-@app_views.route('/states/<state_id>', methods=['DELETE'])
+@app_views.route('/states/<state_id>/', methods=['DELETE'])
 def delete_state(state_id=None):
     """deletes a state"""
     if state_id is None:
@@ -46,7 +46,7 @@ def create_state():
     return jsonify(s.to_json()), 201
 
 
-@app_views.route('/states/<state_id>', methods=['PUT'])
+@app_views.route('/states/<state_id>/', methods=['PUT'])
 def update_state(state_id=None):
     try:
         r = request.get_json()
