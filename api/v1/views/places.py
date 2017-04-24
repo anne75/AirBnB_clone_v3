@@ -24,7 +24,7 @@ def view_place(place_id=None):
 
 @app_views.route('/places/<place_id>/', methods=['DELETE'])
 def delete_place(place_id=None):
-    """deletes an place"""
+    """deletes a place"""
     place = storage.get("Place", place_id)
     if place is None:
         abort(404)
@@ -44,7 +44,7 @@ def create_place(city_id):
         return "Not a JSON", 400
     if 'user_id' not in r.keys():
         return "Missing user_id", 400
-    user = storage.get("User", r["user_id"])
+    user = storage.get("User", r.get("user_id"))
     if user is None:
         abort(404)
     if 'name' not in r.keys():
@@ -57,6 +57,7 @@ def create_place(city_id):
 
 @app_views.route('/places/<place_id>/', methods=['PUT'])
 def update_place(place_id=None):
+    """update a place"""
     try:
         r = request.get_json()
     except:

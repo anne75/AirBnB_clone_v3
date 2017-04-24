@@ -1,8 +1,10 @@
 #!/usr/bin/python3
+from models import storage
+from os import getenv
 from models.base_model import BaseModel, Base, Table, Column
 from sqlalchemy import ForeignKey, String, Integer, Float
 from sqlalchemy.orm import relationship, backref
-from os import getenv
+
 """
 place module
     contains
@@ -79,6 +81,6 @@ class Place(BaseModel, Base):
             """
             lists all reviews for a place
             """
-            all_reviews = models.storage.all("Review").values()
+            all_reviews = storage.all("Review").values()
             result = [r for r in all_reviews if r.place_id == self.id]
             return result
