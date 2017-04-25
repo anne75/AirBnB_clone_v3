@@ -1,10 +1,4 @@
 #!/usr/bin/python3
-import models
-from os import getenv
-from models.base_model import BaseModel, Base, Table, Column
-from sqlalchemy import ForeignKey, String, Integer, Float
-from sqlalchemy.orm import relationship, backref
-
 """
 place module
     contains
@@ -12,20 +6,35 @@ place module
             used to link table places and amenities
         Place inherts from BaseModel and Base
 """
+import models
+from models.base_model import BaseModel, Base, Table, Column
+from os import getenv
+from sqlalchemy import ForeignKey, String, Integer, Float
+from sqlalchemy.orm import relationship, backref
 
 
-class PlaceAmenity(Base):
-    """
-    PlaceAmenity class designed to link table places and table amenities
-    of the SQLAlchmeny
-    """
-    if getenv('HBNB_TYPE_STORAGE', 'fs') == 'db':
-        __tablename__ = "place_amenity"
-        place_id = Column(String(60),
-                          ForeignKey('places.id'),
-                          primary_key=True, nullable=False)
-        amenity_id = Column(String(60), ForeignKey('amenities.id'),
-                            primary_key=True, nullable=False)
+# class PlaceAmenity(Base):
+#     """
+#     PlaceAmenity class designed to link table places and table amenities
+#     of the SQLAlchmeny
+#     """
+#     if getenv('HBNB_TYPE_STORAGE', 'fs') == 'db':
+#         __tablename__ = "place_amenity"
+#         place_id = Column(String(60),
+#                           ForeignKey('places.id'),
+#                           primary_key=True, nullable=False)
+#         amenity_id = Column(String(60), ForeignKey('amenities.id'),
+#                             primary_key=True, nullable=False)
+
+
+if getenv('HBNB_TYPE_STORAGE', 'fs') == 'db':
+    place_amenity = Table("place_amenity", Base.metadata,
+                          Column("place_id", String(60),
+                                 ForeignKey('places.id'),
+                                 primary_key=True, nullable=False),
+                          Column("amenity_id", String(60),
+                                 ForeignKey('amenities.id'),
+                                 primary_key=True, nullable=False))
 
 
 class Place(BaseModel, Base):
@@ -55,6 +64,7 @@ class Place(BaseModel, Base):
 #                              cascade="all, delete, delete-orphan")
         reviews = relationship("Review", backref="place",
                                cascade="all, delete, delete-orphan")
+        __mapper_args__ = {"confirm_deleted_rows": False}
     else:
         city_id = ""
         user_id = ""
