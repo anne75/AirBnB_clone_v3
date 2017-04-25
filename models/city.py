@@ -38,5 +38,6 @@ class City(BaseModel, Base):
             returns all places in a City
             """
             all_places = models.storage.all("Place").values()
-            result = [place for place in all_places if place.city_id == self.id]
+            result = [place for place in all_places if
+                      place.city_id == self.id]
             return result

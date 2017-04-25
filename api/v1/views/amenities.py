@@ -8,8 +8,8 @@ from flask import (abort, jsonify, make_response, request)
 def view_amenity(amenity_id=None):
     """view amenity"""
     if amenity_id is None:
-        all_amenities = [state.to_json() for state \
-                      in storage.all("Amenity").values()]
+        all_amenities = [state.to_json() for state
+                         in storage.all("Amenity").values()]
         return jsonify(all_amenities)
     s = storage.get("Amenity", amenity_id)
     if s is None:

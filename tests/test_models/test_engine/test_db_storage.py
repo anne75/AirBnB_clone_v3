@@ -23,29 +23,28 @@ class Test_DBStorage(unittest.TestCase):
                      'created_at': datetime(2017, 2, 12, 00, 31, 53, 331900),
                      'name': 'wifi'}
         cls.model = Amenity(**test_args)
-        cls.test_len = 0
 
     @classmethod
     def tearDownClass(cls):
         storage.close()
 
     def test_all(self):
-        output = storage.all('State')
-        self.assertEqual(len(output), self.test_len)
+        l1 = len(storage.all('State'))
         state = State(name="State test all")
         state.save()
         output = storage.all('State')
-        self.assertEqual(len(output), self.test_len + 1)
+        self.assertEqual(len(output), l1 + 1)
+        self.assertIn(state.id, output.keys())
 
     def test_new(self):
         # note: we cannot assume order of test is order written
-        self.test_len = len(storage.all())
+        test_len = len(storage.all())
         # self.assertEqual(len(storage.all()), self.test_len)
         self.model.save()
-        self.assertEqual(len(storage.all()), self.test_len + 1)
+        self.assertEqual(len(storage.all()), test_len + 1)
         a = Amenity(name="thing")
         a.save()
-        self.assertEqual(len(storage.all()), self.test_len + 2)
+        self.assertEqual(len(storage.all()), test_len + 2)
 
     def test_save(self):
         test_len = len(storage.all())
@@ -63,7 +62,7 @@ class Test_DBStorage(unittest.TestCase):
         for v in all_storage.values():
             storage.delete(v)
             test_len -= 1
-            self.assertEqual(test_len, storage.count())
+            self.assertGreaterEqual(test_len, storage.count())
 
     def test_reload(self):
         """not actually testing reload as it creates a parallel new session"""
