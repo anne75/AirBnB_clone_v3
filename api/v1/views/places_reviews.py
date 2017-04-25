@@ -1,9 +1,9 @@
 #!/usr/bin/python3
-from api.v1.views import (app_views, Review, storage)
-from flask import (abort, jsonify, request)
 """
 Review model hold the endpoint (route) and their respective view functions
 """
+from api.v1.views import (app_views, Review, storage)
+from flask import (abort, jsonify, request)
 
 
 @app_views.route("/places/<place_id>/reviews/", methods=["GET"])
