@@ -1,8 +1,10 @@
 #!/usr/bin/python3
+import models
+from os import getenv
 from models.base_model import BaseModel, Base, Table, Column
 from sqlalchemy import ForeignKey, String, Integer, Float
 from sqlalchemy.orm import relationship, backref
-from os import getenv
+
 """
 place module
     contains
@@ -47,9 +49,10 @@ class Place(BaseModel, Base):
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
         amenities = relationship("Amenity", secondary="place_amenity",
-                                 viewonly=True)
-        place_amenities = relationship("PlaceAmenity", backref="place",
-                              cascade="all, delete, delete-orphan")
+                                 backref="places")
+        # no view_only=True
+#        place_amenities = relationship("PlaceAmenity", backref="place",
+#                              cascade="all, delete, delete-orphan")
         reviews = relationship("Review", backref="place",
                               cascade="all, delete, delete-orphan")
     else:
@@ -71,3 +74,13 @@ class Place(BaseModel, Base):
         Inherts from BaseClass
         """
         super().__init__(*args, **kwargs)
+
+    if getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
+        @property
+        def reviews(self):
+            """
+            lists all reviews for a place
+            """
+            all_reviews = models.storage.all("Review").values()
+            result = [r for r in all_reviews if r.place_id == self.id]
+            return result

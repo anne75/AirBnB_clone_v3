@@ -6,7 +6,7 @@ Review model hold the endpoint (route) and their respective view functions
 """
 
 
-@app_views.route("/places/<place_id>/reviews", methods=["GET"])
+@app_views.route("/places/<place_id>/reviews/", methods=["GET"])
 def all_reviews(place_id):
     """
     returns a list of all the reviews
@@ -18,7 +18,7 @@ def all_reviews(place_id):
     return jsonify(reviews)
 
 
-@app_views.route("/reviews/<review_id>", methods=["GET"])
+@app_views.route("/reviews/<review_id>/", methods=["GET"])
 def one_review(review_id):
     """
     returns one review
@@ -29,7 +29,7 @@ def one_review(review_id):
     return jsonify(review.to_json())
 
 
-@app_views.route("/reviews/<review_id>", methods=["DELETE"])
+@app_views.route("/reviews/<review_id>/", methods=["DELETE"])
 def delete_one_review(review_id):
     """
     deletes one city
@@ -43,7 +43,7 @@ def delete_one_review(review_id):
     return jsonify({}), 200
 
 
-@app_views.route("/places/<place_id>/reviews", methods=["POST"])
+@app_views.route("/places/<place_id>/reviews/", methods=["POST"])
 def create_review(place_id):
     """
     creates one review
@@ -72,7 +72,7 @@ def create_review(place_id):
     return jsonify(review.to_json()), 201
 
 
-@app_views.route("/reviews/<review_id>", methods=["PUT"])
+@app_views.route("/reviews/<review_id>/", methods=["PUT"])
 def update_review(review_id):
     """
     Body of http request seems to only to contain text

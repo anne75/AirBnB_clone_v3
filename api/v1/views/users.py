@@ -4,7 +4,7 @@ from flask import (abort, jsonify, make_response, request)
 
 
 @app_views.route('/users/', methods=['GET'])
-@app_views.route('/users/<user_id>', methods=['GET'])
+@app_views.route('/users/<user_id>/', methods=['GET'])
 def view_user(user_id=None):
     """view user"""
     if user_id is None:
@@ -17,7 +17,7 @@ def view_user(user_id=None):
     return jsonify(s.to_json())
 
 
-@app_views.route('/users/<user_id>', methods=['DELETE'])
+@app_views.route('/users/<user_id>/', methods=['DELETE'])
 def delete_user(user_id=None):
     """deletes an user"""
     user = storage.get("User", user_id)
@@ -32,29 +32,29 @@ def create_user():
     """create an user"""
     try:
         r = request.get_json()
-        if 'email' not in r.keys():
-            return "Missing email", 400
-        if 'password' not in r.keys():
-            return "Missing password", 400
-        s = User(**r)
-        s.save()
-        return jsonify(s.to_json()), 201
     except:
         return "Not a JSON", 400
+    if 'email' not in r.keys():
+        return "Missing email", 400
+    if 'password' not in r.keys():
+        return "Missing password", 400
+    s = User(**r)
+    s.save()
+    return jsonify(s.to_json()), 201
 
 
-@app_views.route('/users/<user_id>', methods=['PUT'])
+@app_views.route('/users/<user_id>/', methods=['PUT'])
 def update_user(user_id=None):
     try:
         r = request.get_json()
-        a = storage.get("User", user_id)
-        if a is None:
-            abort(404)
-        for k in ("id", "email", "created_at", "updated_at"):
-            r.pop(k, None)
-        for k, v in r.items():
-            setattr(a, k, v)
-        a.save()
-        return jsonify(a.to_json()), 200
     except:
         return "Not a JSON", 400
+    a = storage.get("User", user_id)
+    if a is None:
+        abort(404)
+    for k in ("id", "email", "created_at", "updated_at"):
+        r.pop(k, None)
+    for k, v in r.items():
+        setattr(a, k, v)
+    a.save()
+    return jsonify(a.to_json()), 200

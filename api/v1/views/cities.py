@@ -6,7 +6,7 @@ from api.v1.views import (app_views, City, storage)
 from flask import (abort, jsonify, request)
 
 
-@app_views.route("/states/<state_id>/cities", methods=["GET"])
+@app_views.route("/states/<state_id>/cities/", methods=["GET"])
 def state_all_cities(state_id):
     """
     Returns all the cities of a state or raise 404 error
@@ -18,7 +18,7 @@ def state_all_cities(state_id):
     return jsonify(all_cities)
 
 
-@app_views.route("/cities/<city_id>", methods=["GET"])
+@app_views.route("/cities/<city_id>/", methods=["GET"])
 def one_city(city_id):
     """
     Returns one city or raise 404 error
@@ -29,7 +29,7 @@ def one_city(city_id):
     return jsonify(city.to_json())
 
 
-@app_views.route("/cities/<city_id>", methods=["DELETE"])
+@app_views.route("/cities/<city_id>/", methods=["DELETE"])
 def delete_one_city(city_id):
     """
     deletes one city
@@ -43,15 +43,17 @@ def delete_one_city(city_id):
     return jsonify({})
 
 
-@app_views.route("/states/<state_id>/cities", methods=["POST"])
+@app_views.route("/states/<state_id>/cities/", methods=["POST"])
 def create_one_city(state_id):
     try:
         r = request.get_json()
     except:
         return "Not a JSON", 400
-
     if 'name' not in r.keys():
         return "Missing name", 400
+    s = storage.get("State", state_id)
+    if s is None:
+        abort(404)
     # creates the dictionary r as kwargs to create a city object
     c = City(**r)
     c.state_id = state_id
@@ -59,7 +61,7 @@ def create_one_city(state_id):
     return jsonify(c.to_json()), 201
 
 
-@app_views.route("/cities/<city_id>", methods=["PUT"])
+@app_views.route("/cities/<city_id>/", methods=["PUT"])
 def update_one_city(city_id):
     city = storage.get("City", city_id)
     if city is None:

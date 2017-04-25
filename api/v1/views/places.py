@@ -13,7 +13,7 @@ def view_places_in_city(city_id):
     return jsonify(result)
 
 
-@app_views.route('/places/<place_id>', methods=['GET'])
+@app_views.route('/places/<place_id>/', methods=['GET'])
 def view_place(place_id=None):
     """view place"""
     s = storage.get("Place", place_id)
@@ -22,9 +22,9 @@ def view_place(place_id=None):
     return jsonify(s.to_json())
 
 
-@app_views.route('/places/<place_id>', methods=['DELETE'])
+@app_views.route('/places/<place_id>/', methods=['DELETE'])
 def delete_place(place_id=None):
-    """deletes an place"""
+    """deletes a place"""
     place = storage.get("Place", place_id)
     if place is None:
         abort(404)
@@ -44,7 +44,7 @@ def create_place(city_id):
         return "Not a JSON", 400
     if 'user_id' not in r.keys():
         return "Missing user_id", 400
-    user = storage.get("User", r["user_id"])
+    user = storage.get("User", r.get("user_id"))
     if user is None:
         abort(404)
     if 'name' not in r.keys():
@@ -55,18 +55,19 @@ def create_place(city_id):
     return jsonify(s.to_json()), 201
 
 
-@app_views.route('/places/<place_id>', methods=['PUT'])
+@app_views.route('/places/<place_id>/', methods=['PUT'])
 def update_place(place_id=None):
+    """update a place"""
     try:
         r = request.get_json()
-        a = storage.get("Place", place_id)
-        if a is None:
-            abort(404)
-        for k in ("id", "user_id", "city_id", "created_at", "updated_at"):
-            r.pop(k, None)
-        for k, v in r.items():
-            setattr(a, k, v)
-        a.save()
-        return jsonify(a.to_json()), 200
     except:
         return "Not a JSON", 400
+    a = storage.get("Place", place_id)
+    if a is None:
+        abort(404)
+    for k in ("id", "user_id", "city_id", "created_at", "updated_at"):
+        r.pop(k, None)
+    for k, v in r.items():
+        setattr(a, k, v)
+    a.save()
+    return jsonify(a.to_json()), 200

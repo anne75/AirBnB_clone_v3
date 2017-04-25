@@ -21,7 +21,7 @@ def view_one_state(state_id=None):
     return jsonify(state.to_json())
 
 
-@app_views.route('/states/<state_id>', methods=['DELETE'])
+@app_views.route('/states/<state_id>/', methods=['DELETE'])
 def delete_state(state_id=None):
     """deletes a state"""
     if state_id is None:
@@ -37,27 +37,27 @@ def delete_state(state_id=None):
 def create_state():
     try:
         r = request.get_json()
-        if 'name' not in r.keys():
-            return "Missing name", 400
-        s = State(**r)
-        s.save()
-        return jsonify(s.to_json()), 201
     except:
         return "Not a JSON", 400
+    if 'name' not in r.keys():
+        return "Missing name", 400
+    s = State(**r)
+    s.save()
+    return jsonify(s.to_json()), 201
 
 
-@app_views.route('/states/<state_id>', methods=['PUT'])
+@app_views.route('/states/<state_id>/', methods=['PUT'])
 def update_state(state_id=None):
     try:
         r = request.get_json()
-        state = storage.get("State", state_id)
-        if state is None:
-            abort(404)
-        for k in ("id", "created_at", "updated_at"):
-            r.pop(k, None)
-        for k, v in r.items():
-            setattr(state, k, v)
-        state.save()
-        return jsonify(state.to_json()), 200
     except:
         return "Not a JSON", 400
+    state = storage.get("State", state_id)
+    if state is None:
+        abort(404)
+    for k in ("id", "created_at", "updated_at"):
+        r.pop(k, None)
+    for k, v in r.items():
+        setattr(state, k, v)
+    state.save()
+    return jsonify(state.to_json()), 200
