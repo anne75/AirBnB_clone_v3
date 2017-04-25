@@ -6,13 +6,13 @@ Index model holds the endpoint (route)
 """
 
 
-@app_views.route('/status/')
+@app_views.route('/status')
 def status():
     """ returns status as 'ok' """
     return jsonify({"status": "OK"})
 
 
-@app_views.route('/stats/')
+@app_views.route('/stats')
 def stats():
     """ retrieves the number of each obj by type """
     models_available = {"User": "users",
