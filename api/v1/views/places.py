@@ -47,6 +47,8 @@ def create_place(city_id):
     try:
         r = request.get_json()
     except:
+        r = None
+    if r is None:
         return "Not a JSON", 400
     if 'user_id' not in r.keys():
         return "Missing user_id", 400
@@ -67,6 +69,8 @@ def update_place(place_id=None):
     try:
         r = request.get_json()
     except:
+        r = None
+    if r is None:
         return "Not a JSON", 400
     a = storage.get("Place", place_id)
     if a is None:
