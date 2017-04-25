@@ -58,10 +58,9 @@ def update_state(state_id=None):
     state = storage.get("State", state_id)
     if state is None:
         abort(404)
-#    for k in ("id", "created_at", "updated_at"):
-#        r.pop(k, None)
+    for k in ("id", "created_at", "updated_at"):
+        r.pop(k, None)
     for k, v in r.items():
-        if k not in ("id", "created_at", "updated_at"):
-            setattr(state, k, v)
+        setattr(state, k, v)
     state.save()
     return jsonify(state.to_json()), 200
