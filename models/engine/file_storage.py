@@ -72,7 +72,7 @@ class FileStorage:
         """puts all the object to file after serializing them"""
         store = {}
         for k in FileStorage.__objects.keys():
-            store[k] = FileStorage.__objects[k].to_json()
+            store[k] = FileStorage.__objects[k].to_json(True)
         with open(FileStorage.__file_path, mode="w+", encoding="utf-8") as fd:
             fd.write(json.dumps(store))
 
@@ -116,7 +116,7 @@ class FileStorage:
         Return:
            object of cls and id passed in argument
         """
-        if cls not in self.__models_available.keys():
+        if (cls not in self.__models_available.keys()) or (id_ is None):
             return None
         all_objs = self.all(cls)
         for k in all_objs.keys():

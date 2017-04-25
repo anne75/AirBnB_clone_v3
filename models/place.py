@@ -1,8 +1,10 @@
 #!/usr/bin/python3
-from models.base_model import BaseModel, Base, Table, Column
-from sqlalchemy.orm import relationship, backref
-from sqlalchemy import ForeignKey, String, Integer, Float
+import models
 from os import getenv
+from models.base_model import BaseModel, Base, Table, Column
+from sqlalchemy import ForeignKey, String, Integer, Float
+from sqlalchemy.orm import relationship, backref
+
 """
 place module
     contains
@@ -19,7 +21,8 @@ class PlaceAmenity(Base):
     """
     if getenv('HBNB_TYPE_STORAGE', 'fs') == 'db':
         __tablename__ = "place_amenity"
-        place_id = Column(String(60), ForeignKey('places.id'),
+        place_id = Column(String(60),
+                          ForeignKey('places.id'),
                           primary_key=True, nullable=False)
         amenity_id = Column(String(60), ForeignKey('amenities.id'),
                             primary_key=True, nullable=False)
@@ -31,8 +34,12 @@ class Place(BaseModel, Base):
     """
     if getenv('HBNB_TYPE_STORAGE', 'fs') == 'db':
         __tablename__ = "places"
-        city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
-        user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
+        city_id = Column(String(60),
+                         ForeignKey('cities.id'),
+                         nullable=False)
+        user_id = Column(String(60),
+                         ForeignKey('users.id'),
+                         nullable=False)
         name = Column(String(128), nullable=False)
         description = Column(String(1024), nullable=True)
         number_rooms = Column(Integer, default=0, nullable=False)
@@ -42,7 +49,12 @@ class Place(BaseModel, Base):
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
         amenities = relationship("Amenity", secondary="place_amenity",
-                                 viewonly=True)
+                                 backref="places")
+        # no view_only=True
+#        place_amenities = relationship("PlaceAmenity", backref="place",
+#                              cascade="all, delete, delete-orphan")
+        reviews = relationship("Review", backref="place",
+                              cascade="all, delete, delete-orphan")
     else:
         city_id = ""
         user_id = ""
@@ -62,3 +74,13 @@ class Place(BaseModel, Base):
         Inherts from BaseClass
         """
         super().__init__(*args, **kwargs)
+
+    if getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
+        @property
+        def reviews(self):
+            """
+            lists all reviews for a place
+            """
+            all_reviews = models.storage.all("Review").values()
+            result = [r for r in all_reviews if r.place_id == self.id]
+            return result

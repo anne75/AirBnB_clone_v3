@@ -82,7 +82,7 @@ class BaseModel:
         return "[{}] ({}) {}".format(type(self)
                                      .__name__, self.id, self.__dict__)
 
-    def to_json(self):
+    def to_json(self, saving=False):
         """convert to json"""
         dupe = self.__dict__.copy()
         dupe.pop('_sa_instance_state', None)
@@ -92,6 +92,12 @@ class BaseModel:
         if ("updated_at" in dupe):
             dupe["updated_at"] = dupe["updated_at"].isoformat()
         dupe["__class__"] = type(self).__name__
+        if not saving:
+            dupe.pop("password", None)
+        else:
+            value = dupe.pop("password", None)
+            if value is not None:
+                dupe["password"] = value.hexdigest()
         return dupe
 
 
@@ -106,4 +112,4 @@ class BaseModel:
 ##            if name in self.__dict__.keys()
 ## and self.__dict__[name] is not None:
 ##                return
-##        self.__dict__[name] = value
+##        object.__setattr__(self, name, value):
