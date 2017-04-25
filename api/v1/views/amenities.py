@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+"""
+This is module amenities
+"""
 from api.v1.views import (app_views, Amenity, storage)
 from flask import (abort, jsonify, make_response, request)
 
