@@ -6,7 +6,8 @@ from api.v1.views import (app_views, City, storage)
 from flask import (abort, jsonify, request)
 
 
-@app_views.route("/states/<state_id>/cities", methods=["GET"], strict_slashes=False)
+@app_views.route("/states/<state_id>/cities", methods=["GET"],
+                 strict_slashes=False)
 def state_all_cities(state_id):
     """
     Returns all the cities of a state or raise 404 error
@@ -43,11 +44,14 @@ def delete_one_city(city_id):
     return jsonify({})
 
 
-@app_views.route("/states/<state_id>/cities", methods=["POST"], strict_slashes=False)
+@app_views.route("/states/<state_id>/cities", methods=["POST"],
+                 strict_slashes=False)
 def create_one_city(state_id):
     try:
         r = request.get_json()
     except:
+        r = None
+    if r is None:
         return "Not a JSON", 400
     if 'name' not in r.keys():
         return "Missing name", 400
@@ -69,6 +73,8 @@ def update_one_city(city_id):
     try:
         r = request.get_json()
     except:
+        r = None
+    if r is None:
         return "Not a JSON", 400
     for k in ("id", "created_at", "updated_at", "state_id"):
         r.pop(k, None)
