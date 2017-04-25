@@ -97,8 +97,6 @@ class BaseModel:
             dupe.pop("password", None)
         else:
             value = dupe.pop("password", None)
-            if value is not None:
-                dupe["password"] = value.hexdigest()
         return dupe
 
 

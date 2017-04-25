@@ -2,7 +2,10 @@
 """
 user module
 contains
-The User Class inherts from BaseModel, Base
+The User Class inherits from BaseModel, Base
+Since I am using my own setter/getter to encrypt the password
+I need to redefine password as a protected class attribute, otherwise
+the orm is lost and does not create the password column
 """
 from models.base_model import BaseModel, Base, Table, Column, String
 from sqlalchemy.orm import relationship, backref
@@ -17,7 +20,7 @@ class User(BaseModel, Base):
     if getenv('HBNB_TYPE_STORAGE') == 'db':
         __tablename__ = "users"
         email = Column(String(128), nullable=False)
-        password = Column(String(128), nullable=False)
+        _password = Column("password", String(128), nullable=False)
         first_name = Column(String(128), nullable=True)
         last_name = Column(String(128), nullable=True)
         reviews = relationship("Review", backref="user",
@@ -40,7 +43,7 @@ class User(BaseModel, Base):
 
     @property
     def password(self):
-        return self.__dict__.get('password', "")
+        return self.__dict__.get('_password', "")
 
     @password.setter
     def password(self, value):
@@ -51,4 +54,4 @@ class User(BaseModel, Base):
            value: password new value
         """
         b = bytes(value.encode("utf-8"))
-        self.__dict__['password'] = hashlib.md5(b)
+        self.__dict__['_password'] = hashlib.md5(b).hexdigest()
