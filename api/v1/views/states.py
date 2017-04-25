@@ -13,7 +13,7 @@ def view_all_states():
     return jsonify(all_states)
 
 
-@app_views.route('/states/<state_id>', methods=['GET'])
+@app_views.route('/states/<state_id>/', methods=['GET'])
 def view_one_state(state_id=None):
     """retrieves one state"""
     if state_id is None:
