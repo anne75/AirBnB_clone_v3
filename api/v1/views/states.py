@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+"""
+This is module states
+"""
 from api.v1.views import (app_views, State, storage)
 from flask import (abort, jsonify, make_response, request)
 

@@ -1,18 +1,18 @@
 #!/usr/bin/python3
-from api.v1.views import app_views, storage
-from flask import jsonify
 """
 Index model holds the endpoint (route)
 """
+from api.v1.views import app_views, storage
+from flask import jsonify
 
 
-@app_views.route('/status')
+@app_views.route('/status/')
 def status():
     """ returns status as 'ok' """
     return jsonify({"status": "OK"})
 
 
-@app_views.route('/stats')
+@app_views.route('/stats/')
 def stats():
     """ retrieves the number of each obj by type """
     models_available = {"User": "users",

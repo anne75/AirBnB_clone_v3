@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-Contains
+This is module cities
 """
 from api.v1.views import (app_views, City, storage)
 from flask import (abort, jsonify, request)

@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+"""
+This is module places
+"""
 from api.v1.views import (app_views, Place, storage)
 from flask import (abort, jsonify, make_response, request)
 

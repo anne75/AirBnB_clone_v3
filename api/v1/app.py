@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-Module
+Module app
 """
 from api.v1.views import app_views
 from flasgger import Swagger
@@ -14,6 +14,7 @@ app = Flask(__name__)
 CORS(app, origins="0.0.0.0")
 app.register_blueprint(app_views)
 Swagger(app)
+
 
 @app.errorhandler(404)
 def not_found(error):
