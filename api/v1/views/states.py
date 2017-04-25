@@ -58,6 +58,8 @@ def update_state(state_id=None):
     try:
         r = request.get_json()
     except:
+        r = None
+    if r is None:
         return "Not a JSON", 400
     state = storage.get("State", state_id)
     if state is None:
