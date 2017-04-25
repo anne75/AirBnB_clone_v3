@@ -6,8 +6,8 @@ from api.v1.views import (app_views, User, storage)
 from flask import (abort, jsonify, make_response, request)
 
 
-@app_views.route('/users/', methods=['GET'])
-@app_views.route('/users/<user_id>/', methods=['GET'])
+@app_views.route('/users', methods=['GET'], strict_slashes=False)
+@app_views.route('/users/<user_id>', methods=['GET'], strict_slashes=False)
 def view_user(user_id=None):
     """view user"""
     if user_id is None:
@@ -20,7 +20,7 @@ def view_user(user_id=None):
     return jsonify(s.to_json())
 
 
-@app_views.route('/users/<user_id>/', methods=['DELETE'])
+@app_views.route('/users/<user_id>', methods=['DELETE'], strict_slashes=False)
 def delete_user(user_id=None):
     """deletes an user"""
     user = storage.get("User", user_id)
@@ -30,12 +30,14 @@ def delete_user(user_id=None):
     return jsonify({}), 200
 
 
-@app_views.route('/users/', methods=['POST'])
+@app_views.route('/users', methods=['POST'], strict_slashes=False)
 def create_user():
     """create an user"""
     try:
         r = request.get_json()
     except:
+        r = None
+    if r is None:
         return "Not a JSON", 400
     if 'email' not in r.keys():
         return "Missing email", 400
@@ -46,11 +48,13 @@ def create_user():
     return jsonify(s.to_json()), 201
 
 
-@app_views.route('/users/<user_id>/', methods=['PUT'])
+@app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
 def update_user(user_id=None):
     try:
         r = request.get_json()
     except:
+        r = None
+    if r is None:
         return "Not a JSON", 400
     a = storage.get("User", user_id)
     if a is None:
