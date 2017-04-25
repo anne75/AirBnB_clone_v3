@@ -1,13 +1,13 @@
 #!/usr/bin/python3
+"""
+user module
+contains
+The User Class inherts from BaseModel, Base
+"""
 from models.base_model import BaseModel, Base, Table, Column, String
 from sqlalchemy.orm import relationship, backref
 import hashlib
 from os import getenv
-"""
-user module
-    contains
-        The User Class inherts from BaseModel, Base
-"""
 
 
 class User(BaseModel, Base):
