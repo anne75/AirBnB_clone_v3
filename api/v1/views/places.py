@@ -89,16 +89,17 @@ def list_places():
     try:
         r = request.get_json()
     except:
+        r = None
+    if r is None:
         return "Not a JSON", 400
     all_cities = storage.all("City").values()
     cities = r.get("cities")
     if cities is not None:
         all_cities = [c for c in all_cities if c.id in cities]
-    all_states = [e for e in storage.all("State").keys()]
     states = r.get("states")
     if states is not None:
-        all_states = [s for s in all_states if s in states]
         if cities is None:
+            all_states = storage.all("State").values()
             all_cities = [c for s in all_states for c in s.cities]
         else:
             all_cities = [c for c in all_cities if c.state_id in states]
