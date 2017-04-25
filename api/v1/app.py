@@ -15,6 +15,7 @@ CORS(app, origins="0.0.0.0")
 app.register_blueprint(app_views)
 Swagger(app)
 
+
 @app.errorhandler(404)
 def not_found(error):
     """json 404 page"""
