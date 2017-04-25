@@ -6,7 +6,8 @@ from api.v1.views import (app_views, Place, storage)
 from flask import (abort, jsonify, make_response, request)
 
 
-@app_views.route('/cities/<city_id>/places/', methods=['GET'])
+@app_views.route('/cities/<city_id>/places', methods=['GET'],
+                 strict_slashes=False)
 def view_places_in_city(city_id):
     """list all places in a city"""
     city = storage.get("City", city_id)
@@ -16,7 +17,7 @@ def view_places_in_city(city_id):
     return jsonify(result)
 
 
-@app_views.route('/places/<place_id>/', methods=['GET'])
+@app_views.route('/places/<place_id>', methods=['GET'], strict_slashes=False)
 def view_place(place_id=None):
     """view place"""
     s = storage.get("Place", place_id)
@@ -25,7 +26,8 @@ def view_place(place_id=None):
     return jsonify(s.to_json())
 
 
-@app_views.route('/places/<place_id>/', methods=['DELETE'])
+@app_views.route('/places/<place_id>', methods=['DELETE'],
+                 strict_slashes=False)
 def delete_place(place_id=None):
     """deletes a place"""
     place = storage.get("Place", place_id)
@@ -35,7 +37,8 @@ def delete_place(place_id=None):
     return jsonify({}), 200
 
 
-@app_views.route('/cities/<city_id>/places/', methods=['POST'])
+@app_views.route('/cities/<city_id>/places', methods=['POST'],
+                 strict_slashes=False)
 def create_place(city_id):
     """create a place"""
     city = storage.get("City", city_id)
@@ -58,7 +61,7 @@ def create_place(city_id):
     return jsonify(s.to_json()), 201
 
 
-@app_views.route('/places/<place_id>/', methods=['PUT'])
+@app_views.route('/places/<place_id>', methods=['PUT'], strict_slashes=False)
 def update_place(place_id=None):
     """update a place"""
     try:
@@ -75,27 +78,28 @@ def update_place(place_id=None):
     a.save()
     return jsonify(a.to_json()), 200
 
-@app_views.route('/places_search/', methods=['POST'])
+
+@app_views.route('/places_search', methods=['POST'], strict_slashes=False)
 def list_places():
     """list places according to values passed in body"""
     try:
         r = request.get_json()
     except:
         return "Not a JSON", 400
-    all_cities = storage.all("City")
+    all_cities = storage.all("City").values()
     cities = r.get("cities")
     if cities is not None:
         all_cities = [c for c in all_cities if c.id in cities]
-    all_states = [e.id for e in storage.all("State")]
+    all_states = [e for e in storage.all("State").keys()]
     states = r.get("states")
     if states is not None:
         all_states = [s for s in all_states if s in states]
         if cities is None:
-            all_cities =[c for s in all_states for c in s.cities]
+            all_cities = [c for s in all_states for c in s.cities]
         else:
             all_cities = [c for c in all_cities if c.state_id in states]
     all_cities = [c.id for c in all_cities]
-    all_amenities = [e.id for e in storage.all("Amenity")]
+    all_amenities = [e for e in storage.all("Amenity").keys()]
     amenities = r.get("amenities")
     if amenities is not None:
         all_amenities = [a for a in all_amenities if a in amenities]

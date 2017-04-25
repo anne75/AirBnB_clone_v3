@@ -48,6 +48,9 @@ class TestStateView(unittest.TestCase):
 
     def test_getstates_empty_db(self):
         """test listing all states in empty db"""
+        s = storage.all("State").values()
+        for e in s:
+            storage.delete(e)
         rv = self.app.get('{}/states/'.format(self.path))
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
@@ -126,6 +129,11 @@ class TestStateView(unittest.TestCase):
                            follow_redirects=True)
         self.assertEqual(rv.status_code, 400)
         self.assertEqual(rv.get_data(), b"Not a JSON")
+        rv = self.app.post('{}/states/'.format(self.path),
+                           content_type="application/x-www-form-urlencoded",
+                           data=state_args,
+                           follow_redirects=True)
+        self.assertEqual(rv.status_code, 400)
 
     def test_create_state_no_name(self):
         """test creating a state without a name"""
