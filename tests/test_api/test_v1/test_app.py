@@ -8,6 +8,7 @@ import json
 from models import storage
 import unittest
 
+
 class TestApp(unittest.TestCase):
 
     @classmethod
@@ -21,8 +22,6 @@ class TestApp(unittest.TestCase):
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
         json_format = json.loads(str(rv.get_data(), encoding="utf-8"))
         self.assertEqual(json_format.get("error"), "Not found")
-
-
 
 
 if __name__ == "__main__":

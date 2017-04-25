@@ -61,7 +61,8 @@ class Test_PlaceModel(unittest.TestCase):
         self.assertEqual(model.name, test_place["name"])
         self.assertEqual(model.description, test_place["description"])
         self.assertEqual(model.number_rooms, test_place["number_rooms"])
-        self.assertEqual(model.number_bathrooms, test_place["number_bathrooms"])
+        self.assertEqual(model.number_bathrooms,
+                         test_place["number_bathrooms"])
         self.assertEqual(model.max_guest, test_place["max_guest"])
         self.assertEqual(model.price_by_night, test_place["price_by_night"])
         self.assertEqual(model.latitude, test_place["latitude"])
@@ -125,16 +126,16 @@ class Test_PlaceModel(unittest.TestCase):
     def test_save(self):
         """saving the object to storage"""
         test_args = {'id': "003",
-                      'city_id': "003",
-                      'user_id': "001",
-                      'name': "TEST REVIEW",
-                      'description': "blah blah",
-                      'number_rooms': 4,
-                      'number_bathrooms': 2,
-                      'max_guest': 4,
-                      'price_by_night': 23,
-                      'latitude': 45.5,
-                      'longitude': 23.4}
+                     'city_id': "003",
+                     'user_id': "001",
+                     'name': "TEST REVIEW",
+                     'description': "blah blah",
+                     'number_rooms': 4,
+                     'number_bathrooms': 2,
+                     'max_guest': 4,
+                     'price_by_night': 23,
+                     'latitude': 45.5,
+                     'longitude': 23.4}
         place = Place(**test_args)
         place.save()
         all_places = storage.all("Place")

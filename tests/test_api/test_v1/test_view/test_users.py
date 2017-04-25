@@ -31,7 +31,7 @@ class TestUserView(unittest.TestCase):
         """set the flask app in testing mode"""
         app.config['TESTING'] = True
         cls.app = app.test_client()
-        cls.path="/api/v1"
+        cls.path = "/api/v1"
 
     def test_getusers(self):
         """test listing all users"""
@@ -45,8 +45,10 @@ class TestUserView(unittest.TestCase):
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
         json_format = getJson(rv)
         self.assertTrue(type(json_format), list)
-        self.assertIn(user_args["first_name"], [e.get("first_name") for e in json_format])
-        self.assertIn(user_args["email"], [e.get("email") for e in json_format])
+        self.assertIn(user_args["first_name"], [e.get("first_name") for e
+                                                in json_format])
+        self.assertIn(user_args["email"], [e.get("email") for e
+                                           in json_format])
         storage.delete(user)
 
     def test_view_one_user(self):
@@ -60,7 +62,8 @@ class TestUserView(unittest.TestCase):
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
         json_format = getJson(rv)
-        self.assertEqual(json_format.get("first_name"), user_args["first_name"])
+        self.assertEqual(json_format.get("first_name"),
+                         user_args["first_name"])
         self.assertEqual(json_format.get("id"), user_args["id"])
         self.assertEqual(json_format.get("email"), user_args["email"])
         storage.delete(user)
@@ -72,7 +75,7 @@ class TestUserView(unittest.TestCase):
         user = User(**user_args)
         user.save()
         rv = self.app.get('{}/users/{}'.format(self.path, "noID"),
-        follow_redirects=True)
+                          follow_redirects=True)
         self.assertEqual(rv.status_code, 404)
         storage.delete(user)
 
@@ -113,7 +116,8 @@ class TestUserView(unittest.TestCase):
         self.assertEqual(rv.status_code, 201)
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
         json_format = getJson(rv)
-        self.assertEqual(json_format.get("first_name"), user_args["first_name"])
+        self.assertEqual(json_format.get("first_name"),
+                         user_args["first_name"])
         self.assertEqual(json_format.get("id"), user_args["id"])
         self.assertEqual(json_format.get("email"), user_args["email"])
         s = storage.get("User", user_args["id"])
@@ -160,9 +164,9 @@ class TestUserView(unittest.TestCase):
         user = User(**user_args)
         user.save()
         rv = self.app.put('{}/users/{}/'.format(self.path, user.id),
-                           content_type="application/json",
-                           data=json.dumps({"first_name": "Z"}),
-                           follow_redirects=True)
+                          content_type="application/json",
+                          data=json.dumps({"first_name": "Z"}),
+                          follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
         json_format = getJson(rv)
@@ -178,13 +182,14 @@ class TestUserView(unittest.TestCase):
         user = User(**user_args)
         user.save()
         rv = self.app.put('{}/users/{}/'.format(self.path, user.id),
-                           content_type="application/json",
-                           data=json.dumps({"id": "Z"}),
-                           follow_redirects=True)
+                          content_type="application/json",
+                          data=json.dumps({"id": "Z"}),
+                          follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
         json_format = getJson(rv)
-        self.assertEqual(json_format.get("first_name"), user_args["first_name"])
+        self.assertEqual(json_format.get("first_name"),
+                         user_args["first_name"])
         self.assertEqual(json_format.get("id"), user_args["id"])
         self.assertEqual(json_format.get("email"), user_args["email"])
         storage.delete(user)
@@ -196,13 +201,14 @@ class TestUserView(unittest.TestCase):
         user = User(**user_args)
         user.save()
         rv = self.app.put('{}/users/{}/'.format(self.path, user.id),
-                           content_type="application/json",
-                           data=json.dumps({"email": "Z@a.com"}),
-                           follow_redirects=True)
+                          content_type="application/json",
+                          data=json.dumps({"email": "Z@a.com"}),
+                          follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
         json_format = getJson(rv)
-        self.assertEqual(json_format.get("first_name"), user_args["first_name"])
+        self.assertEqual(json_format.get("first_name"),
+                         user_args["first_name"])
         self.assertEqual(json_format.get("id"), user_args["id"])
         self.assertEqual(json_format.get("email"), user_args["email"])
         storage.delete(user)
@@ -214,9 +220,9 @@ class TestUserView(unittest.TestCase):
         user = User(**user_args)
         user.save()
         rv = self.app.put('{}/users/{}/'.format(self.path, user.id),
-                           content_type="application/json",
-                           data={"id": "Z"},
-                           follow_redirects=True)
+                          content_type="application/json",
+                          data={"id": "Z"},
+                          follow_redirects=True)
         self.assertEqual(rv.status_code, 400)
         self.assertEqual(rv.get_data(), b"Not a JSON")
         storage.delete(user)
@@ -228,9 +234,9 @@ class TestUserView(unittest.TestCase):
         user = User(**user_args)
         user.save()
         rv = self.app.put('{}/users/{}/'.format(self.path, "noID"),
-                           content_type="application/json",
-                           data=json.dumps({"id": "Z"}),
-                           follow_redirects=True)
+                          content_type="application/json",
+                          data=json.dumps({"id": "Z"}),
+                          follow_redirects=True)
         self.assertEqual(rv.status_code, 404)
         storage.delete(user)
 

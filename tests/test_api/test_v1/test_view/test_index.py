@@ -29,7 +29,7 @@ class TestIndex(unittest.TestCase):
     def setUpClass(cls):
         app.config['TESTING'] = True
         cls.app = app.test_client()
-        cls.path="/api/v1"
+        cls.path = "/api/v1"
 
     def test_status(self):
         rv = self.app.get('{}/status/'.format(self.path))
@@ -43,7 +43,8 @@ class TestIndex(unittest.TestCase):
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
         json_format = getJson(rv)
-        for e in ("users", "reviews", "cities", "states", "places", "amenities"):
+        for e in ("users", "reviews", "cities", "states",
+                  "places", "amenities"):
             self.assertIn(e, json_format.keys())
 
 
