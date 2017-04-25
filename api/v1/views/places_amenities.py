@@ -9,7 +9,8 @@ from sqlalchemy import inspect
 
 if getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
 
-    @app_views.route('/places/<place_id>/amenities/', methods=['GET'])
+    @app_views.route('/places/<place_id>/amenities', methods=['GET'],
+                     strict_slashes=False)
     def view_amenities_in_place(place_id):
         """list all amenities in a place"""
         place = storage.get("Place", place_id)
@@ -18,8 +19,8 @@ if getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
         result = [storage.get("Amenity", i) for i in place.amenities]
         return jsonify(result)
 
-    @app_views.route('/places/<place_id>/amenities/<amenity_id>/',
-                     methods=['DELETE'])
+    @app_views.route('/places/<place_id>/amenities/<amenity_id>',
+                     methods=['DELETE'], strict_slashes=False)
     def delete_placeamenity(place_id=None, amenity_id=None):
         """deletes an amenity"""
         place = storage.get("Place", place_id)
@@ -31,8 +32,8 @@ if getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
             place.save()
         return jsonify({}), 200
 
-    @app_views.route('/places/<place_id>/amenities/<amenity_id>/',
-                     methods=['POST'])
+    @app_views.route('/places/<place_id>/amenities/<amenity_id>',
+                     methods=['POST'], strict_slashes=False)
     def create_amenity_in_place(place_id=None, amenity_id=None):
         """link an amenity to a place"""
         place = storage.get("Place", place_id)
@@ -49,7 +50,8 @@ if getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
 
 else:
 
-    @app_views.route('/places/<place_id>/amenities/', methods=['GET'])
+    @app_views.route('/places/<place_id>/amenities', methods=['GET'],
+                     strict_slashes=False)
     def view_amenities_in_place(place_id):
         """list all amenities in a place"""
         place = storage.get("Place", place_id)
@@ -58,8 +60,8 @@ else:
         result = [p.to_json() for p in place.amenities]
         return jsonify(result)
 
-    @app_views.route('/places/<place_id>/amenities/<amenity_id>/',
-                     methods=['DELETE'])
+    @app_views.route('/places/<place_id>/amenities/<amenity_id>',
+                     methods=['DELETE'], strict_slashes=False)
     def delete_placeamenity(place_id=None, amenity_id=None):
         """deletes an amenity"""
         place = storage.get("Place", place_id)
@@ -76,8 +78,8 @@ else:
         else:
             abort(404)
 
-    @app_views.route('/places/<place_id>/amenities/<amenity_id>/',
-                     methods=['POST'])
+    @app_views.route('/places/<place_id>/amenities/<amenity_id>',
+                     methods=['POST'], strict_slashes=False)
     def create_amenity_in_place(place_id=None, amenity_id=None):
         """link an amenity to a place"""
         place = storage.get("Place", place_id)
