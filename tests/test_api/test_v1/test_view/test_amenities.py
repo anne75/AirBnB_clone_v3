@@ -31,7 +31,7 @@ class TestAmenityView(unittest.TestCase):
         """set the flask app in testing mode"""
         app.config['TESTING'] = True
         cls.app = app.test_client()
-        cls.path="/api/v1"
+        cls.path = "/api/v1"
 
     def test_getamenities(self):
         """test listing all amenities"""
@@ -44,7 +44,8 @@ class TestAmenityView(unittest.TestCase):
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
         json_format = getJson(rv)
         self.assertTrue(type(json_format), list)
-        self.assertIn(amenity_args["name"], [e.get("name") for e in json_format])
+        self.assertIn(amenity_args["name"],
+                      [e.get("name") for e in json_format])
         storage.delete(amenity)
 
     def test_view_one_amenity(self):
@@ -67,7 +68,7 @@ class TestAmenityView(unittest.TestCase):
         amenity = Amenity(**amenity_args)
         amenity.save()
         rv = self.app.get('{}/amenities/{}'.format(self.path, "noID"),
-        follow_redirects=True)
+                          follow_redirects=True)
         self.assertEqual(rv.status_code, 404)
         storage.delete(amenity)
 
@@ -137,9 +138,9 @@ class TestAmenityView(unittest.TestCase):
         amenity = Amenity(**amenity_args)
         amenity.save()
         rv = self.app.put('{}/amenities/{}/'.format(self.path, amenity.id),
-                           content_type="application/json",
-                           data=json.dumps({"name": "Z"}),
-                           follow_redirects=True)
+                          content_type="application/json",
+                          data=json.dumps({"name": "Z"}),
+                          follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
         json_format = getJson(rv)
@@ -153,9 +154,9 @@ class TestAmenityView(unittest.TestCase):
         amenity = Amenity(**amenity_args)
         amenity.save()
         rv = self.app.put('{}/amenities/{}/'.format(self.path, amenity.id),
-                           content_type="application/json",
-                           data=json.dumps({"id": "Z"}),
-                           follow_redirects=True)
+                          content_type="application/json",
+                          data=json.dumps({"id": "Z"}),
+                          follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
         json_format = getJson(rv)
@@ -169,9 +170,9 @@ class TestAmenityView(unittest.TestCase):
         amenity = Amenity(**amenity_args)
         amenity.save()
         rv = self.app.put('{}/amenities/{}/'.format(self.path, amenity.id),
-                           content_type="application/json",
-                           data={"id": "Z"},
-                           follow_redirects=True)
+                          content_type="application/json",
+                          data={"id": "Z"},
+                          follow_redirects=True)
         self.assertEqual(rv.status_code, 400)
         self.assertEqual(rv.get_data(), b"Not a JSON")
         storage.delete(amenity)
@@ -182,9 +183,9 @@ class TestAmenityView(unittest.TestCase):
         amenity = Amenity(**amenity_args)
         amenity.save()
         rv = self.app.put('{}/amenities/{}/'.format(self.path, "noID"),
-                           content_type="application/json",
-                           data=json.dumps({"id": "Z"}),
-                           follow_redirects=True)
+                          content_type="application/json",
+                          data=json.dumps({"id": "Z"}),
+                          follow_redirects=True)
         self.assertEqual(rv.status_code, 404)
         storage.delete(amenity)
 

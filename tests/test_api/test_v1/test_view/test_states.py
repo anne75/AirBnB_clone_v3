@@ -31,7 +31,7 @@ class TestStateView(unittest.TestCase):
         """set the flask app in testing mode"""
         app.config['TESTING'] = True
         cls.app = app.test_client()
-        cls.path="/api/v1"
+        cls.path = "/api/v1"
 
     def test_getstates(self):
         """test listing all states"""
@@ -73,8 +73,9 @@ class TestStateView(unittest.TestCase):
         state_args = {"name": "Zanzibar", "id": "ZA"}
         state = State(**state_args)
         state.save()
-        rv = self.app.delete('{}/states/{}/'.format(self.path, state_args["id"]),
-                                   follow_redirects=True)
+        rv = self.app.delete('{}/states/{}/'.format(self.path,
+                                                    state_args["id"]),
+                             follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
         json_format = getJson(rv)
@@ -133,9 +134,9 @@ class TestStateView(unittest.TestCase):
         state = State(**state_args)
         state.save()
         rv = self.app.put('{}/states/{}/'.format(self.path, state.id),
-                           content_type="application/json",
-                           data=json.dumps({"name": "Z"}),
-                           follow_redirects=True)
+                          content_type="application/json",
+                          data=json.dumps({"name": "Z"}),
+                          follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
         json_format = getJson(rv)
@@ -149,9 +150,9 @@ class TestStateView(unittest.TestCase):
         state = State(**state_args)
         state.save()
         rv = self.app.put('{}/states/{}/'.format(self.path, state.id),
-                           content_type="application/json",
-                           data=json.dumps({"id": "Z"}),
-                           follow_redirects=True)
+                          content_type="application/json",
+                          data=json.dumps({"id": "Z"}),
+                          follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
         json_format = getJson(rv)
@@ -165,9 +166,9 @@ class TestStateView(unittest.TestCase):
         state = State(**state_args)
         state.save()
         rv = self.app.put('{}/states/{}/'.format(self.path, state.id),
-                           content_type="application/json",
-                           data={"id": "Z"},
-                           follow_redirects=True)
+                          content_type="application/json",
+                          data={"id": "Z"},
+                          follow_redirects=True)
         self.assertEqual(rv.status_code, 400)
         self.assertEqual(rv.get_data(), b"Not a JSON")
         storage.delete(state)
@@ -178,9 +179,9 @@ class TestStateView(unittest.TestCase):
         state = State(**state_args)
         state.save()
         rv = self.app.put('{}/states/{}/'.format(self.path, "noID"),
-                           content_type="application/json",
-                           data=json.dumps({"id": "Z"}),
-                           follow_redirects=True)
+                          content_type="application/json",
+                          data=json.dumps({"id": "Z"}),
+                          follow_redirects=True)
         self.assertEqual(rv.status_code, 404)
         storage.delete(state)
 

@@ -38,7 +38,7 @@ class TestReviewView(unittest.TestCase):
         """
         app.config['TESTING'] = True
         cls.app = app.test_client()
-        cls.path="/api/v1"
+        cls.path = "/api/v1"
         cls.state_args = {"name": "Botswana", "id": "BO"}
         cls.state = State(**cls.state_args)
         cls.state.save()
@@ -74,7 +74,8 @@ class TestReviewView(unittest.TestCase):
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
         json_format = getJson(rv)
         self.assertTrue(type(json_format), list)
-        self.assertIn(review_args["text"], [e.get("text") for e in json_format])
+        self.assertIn(review_args["text"],
+                      [e.get("text") for e in json_format])
         self.assertIn(review_args["user_id"],
                       [e.get("user_id") for e in json_format])
         storage.delete(review)
@@ -82,7 +83,7 @@ class TestReviewView(unittest.TestCase):
     def test_getreviews_bad_place(self):
         """test listing all reviews with a bad place id"""
         review_args = {"text": "what a cage", "place_id": self.place.id,
-                      "user_id": self.user.id}
+                       "user_id": self.user.id}
         review = Review(**review_args)
         review.save()
         rv = self.app.get('{}/places/{}/reviews/'.format(self.path, "noID"),
@@ -93,10 +94,11 @@ class TestReviewView(unittest.TestCase):
     def test_view_one_review(self):
         """test retrieving one review"""
         review_args = {"text": "cool cage", "place_id": self.place.id,
-                      "user_id": self.user.id, "id": "RCA"}
+                       "user_id": self.user.id, "id": "RCA"}
         review = Review(**review_args)
         review.save()
-        rv = self.app.get('{}/reviews/{}/'.format(self.path, review_args["id"]),
+        rv = self.app.get('{}/reviews/{}/'.format(self.path,
+                                                  review_args["id"]),
                           follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
@@ -109,7 +111,7 @@ class TestReviewView(unittest.TestCase):
     def test_view_one_review_wrong(self):
         """the id does not match a review"""
         review_args = {"text": "cage", "place_id": self.place.id,
-                      "user_id": self.user.id, "id": "RCA"}
+                       "user_id": self.user.id, "id": "RCA"}
         review = Review(**review_args)
         review.save()
         rv = self.app.get('{}/reviews/{}/'.format(self.path, "noID"),
@@ -120,11 +122,11 @@ class TestReviewView(unittest.TestCase):
     def test_delete_review(self):
         """test delete a review"""
         review_args = {"text": "poor cage", "place_id": self.place.id,
-                      "user_id": self.user.id, "id": "RCA"}
+                       "user_id": self.user.id, "id": "RCA"}
         review = Review(**review_args)
         review.save()
         rv = self.app.delete('{}/reviews/{}/'.format(self.path,
-                                                    review_args["id"]),
+                                                     review_args["id"]),
                              follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
@@ -135,7 +137,7 @@ class TestReviewView(unittest.TestCase):
     def test_delete_review_wrong(self):
         """the id does not match a review"""
         review_args = {"text": "sad cage", "place_id": self.place.id,
-                      "user_id": self.user.id, "id": "RCA"}
+                       "user_id": self.user.id, "id": "RCA"}
         review = Review(**review_args)
         review.save()
         rv = self.app.delete('{}/reviews/{}/'.format(self.path, "noID"),
@@ -145,11 +147,13 @@ class TestReviewView(unittest.TestCase):
 
     def test_create_review(self):
         """test creating a review"""
-        rv = self.app.get('{}/places/{}/reviews/'.format(self.path, self.place,id), follow_redirects=True)
-        review_args = {"text": "cage",
-                      "user_id": self.user.id, "id": "RCA"}
-        rv = self.app.post('{}/places/{}/reviews/'.format(self.path,
+        rv = self.app.get('{}/places/{}/reviews/'.format(self.path,
                                                          self.place.id),
+                          follow_redirects=True)
+        review_args = {"text": "cage",
+                       "user_id": self.user.id, "id": "RCA"}
+        rv = self.app.post('{}/places/{}/reviews/'.format(self.path,
+                                                          self.place.id),
                            content_type="application/json",
                            data=json.dumps(review_args),
                            follow_redirects=True)
@@ -166,9 +170,9 @@ class TestReviewView(unittest.TestCase):
     def test_create_review_bad_json(self):
         """test creating a review with invalid json"""
         review_args = {"text": "cage",
-                      "user_id": self.user.id, "id": "RCA"}
+                       "user_id": self.user.id, "id": "RCA"}
         rv = self.app.post('{}/places/{}/reviews/'.format(self.path,
-                                                         self.place.id),
+                                                          self.place.id),
                            content_type="application/json",
                            data=review_args,
                            follow_redirects=True)
@@ -220,13 +224,13 @@ class TestReviewView(unittest.TestCase):
     def test_update_review_text(self):
         """test updating a review"""
         review_args = {"text": "strong cage", "place_id": self.place.id,
-                      "user_id": self.user.id, "id": "RCA"}
+                       "user_id": self.user.id, "id": "RCA"}
         review = Review(**review_args)
         review.save()
         rv = self.app.put('{}/reviews/{}/'.format(self.path, review.id),
-                           content_type="application/json",
-                           data=json.dumps({"text": "Z"}),
-                           follow_redirects=True)
+                          content_type="application/json",
+                          data=json.dumps({"text": "Z"}),
+                          follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
         json_format = getJson(rv)
@@ -239,13 +243,13 @@ class TestReviewView(unittest.TestCase):
     def test_update_review_id(self):
         """test cannot update review id"""
         review_args = {"text": "cage", "place_id": self.place.id,
-                      "user_id": self.user.id, "id": "RCA"}
+                       "user_id": self.user.id, "id": "RCA"}
         review = Review(**review_args)
         review.save()
         rv = self.app.put('{}/reviews/{}/'.format(self.path, review.id),
-                           content_type="application/json",
-                           data=json.dumps({"id": "Z"}),
-                           follow_redirects=True)
+                          content_type="application/json",
+                          data=json.dumps({"id": "Z"}),
+                          follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
         json_format = getJson(rv)
@@ -258,13 +262,13 @@ class TestReviewView(unittest.TestCase):
     def test_update_review_place_id(self):
         """test cannot update review place_id"""
         review_args = {"text": "cage", "place_id": self.place.id,
-                      "user_id": self.user.id, "id": "RCA"}
+                       "user_id": self.user.id, "id": "RCA"}
         review = Review(**review_args)
         review.save()
         rv = self.app.put('{}/reviews/{}/'.format(self.path, review.id),
-                           content_type="application/json",
-                           data=json.dumps({"place_id": "Z"}),
-                           follow_redirects=True)
+                          content_type="application/json",
+                          data=json.dumps({"place_id": "Z"}),
+                          follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
         json_format = getJson(rv)
@@ -277,13 +281,13 @@ class TestReviewView(unittest.TestCase):
     def test_update_review_user_id(self):
         """test cannot update review user_id"""
         review_args = {"text": "cage", "place_id": self.place.id,
-                      "user_id": self.user.id, "id": "RCA"}
+                       "user_id": self.user.id, "id": "RCA"}
         review = Review(**review_args)
         review.save()
         rv = self.app.put('{}/reviews/{}/'.format(self.path, review.id),
-                           content_type="application/json",
-                           data=json.dumps({"user_id": "Z"}),
-                           follow_redirects=True)
+                          content_type="application/json",
+                          data=json.dumps({"user_id": "Z"}),
+                          follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
         json_format = getJson(rv)
@@ -296,13 +300,13 @@ class TestReviewView(unittest.TestCase):
     def test_update_review_bad_json(self):
         """test update with ill formed json"""
         review_args = {"text": "cage", "place_id": self.place.id,
-                      "user_id": self.user.id, "id": "RCA"}
+                       "user_id": self.user.id, "id": "RCA"}
         review = Review(**review_args)
         review.save()
         rv = self.app.put('{}/reviews/{}/'.format(self.path, review.id),
-                           content_type="application/json",
-                           data={"id": "Z"},
-                           follow_redirects=True)
+                          content_type="application/json",
+                          data={"id": "Z"},
+                          follow_redirects=True)
         self.assertEqual(rv.status_code, 400)
         self.assertEqual(rv.get_data(), b"Not a JSON")
         storage.delete(review)
@@ -310,13 +314,13 @@ class TestReviewView(unittest.TestCase):
     def test_update_place_bad_id(self):
         """test update with no matching id"""
         review_args = {"text": "cage", "place_id": self.place.id,
-                      "user_id": self.user.id, "id": "RCA"}
+                       "user_id": self.user.id, "id": "RCA"}
         review = Review(**review_args)
         review.save()
         rv = self.app.put('{}/reviews/{}/'.format(self.path, "noID"),
-                           content_type="application/json",
-                           data=json.dumps({"text": "Z"}),
-                           follow_redirects=True)
+                          content_type="application/json",
+                          data=json.dumps({"text": "Z"}),
+                          follow_redirects=True)
         self.assertEqual(rv.status_code, 404)
         storage.delete(review)
 
