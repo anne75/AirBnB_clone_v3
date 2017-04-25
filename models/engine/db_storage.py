@@ -39,7 +39,8 @@ class DBStorage:
             getenv('HBNB_MYSQL_USER'),
             getenv('HBNB_MYSQL_PWD'),
             getenv('HBNB_MYSQL_HOST'),
-            getenv('HBNB_MYSQL_DB')))  # adding, echo=True) shows SQL statements
+            getenv('HBNB_MYSQL_DB')))
+        # adding, echo=True) shows SQL statements
         self.__models_available = {"User": User,
                                    "Amenity": Amenity, "City": City,
                                    "Place": Place, "Review": Review,

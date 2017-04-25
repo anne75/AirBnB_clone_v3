@@ -66,6 +66,7 @@ class TestReviewView(unittest.TestCase):
                        "text": "This is a great place"}
         review = Review(**review_args)
         review.save()
+
         rv = self.app.get('{}/places/{}/reviews/'.format(
             self.path, self.place.id),
                           follow_redirects=True)
@@ -92,7 +93,7 @@ class TestReviewView(unittest.TestCase):
     def test_view_one_review(self):
         """test retrieving one review"""
         review_args = {"text": "cool cage", "place_id": self.place.id,
-                      "user_id": self.user.id, "id": "CA"}
+                      "user_id": self.user.id, "id": "RCA"}
         review = Review(**review_args)
         review.save()
         rv = self.app.get('{}/reviews/{}/'.format(self.path, review_args["id"]),
@@ -108,7 +109,7 @@ class TestReviewView(unittest.TestCase):
     def test_view_one_review_wrong(self):
         """the id does not match a review"""
         review_args = {"text": "cage", "place_id": self.place.id,
-                      "user_id": self.user.id, "id": "CA"}
+                      "user_id": self.user.id, "id": "RCA"}
         review = Review(**review_args)
         review.save()
         rv = self.app.get('{}/reviews/{}/'.format(self.path, "noID"),
@@ -119,7 +120,7 @@ class TestReviewView(unittest.TestCase):
     def test_delete_review(self):
         """test delete a review"""
         review_args = {"text": "poor cage", "place_id": self.place.id,
-                      "user_id": self.user.id, "id": "CA"}
+                      "user_id": self.user.id, "id": "RCA"}
         review = Review(**review_args)
         review.save()
         rv = self.app.delete('{}/reviews/{}/'.format(self.path,
@@ -134,7 +135,7 @@ class TestReviewView(unittest.TestCase):
     def test_delete_review_wrong(self):
         """the id does not match a review"""
         review_args = {"text": "sad cage", "place_id": self.place.id,
-                      "user_id": self.user.id, "id": "CA"}
+                      "user_id": self.user.id, "id": "RCA"}
         review = Review(**review_args)
         review.save()
         rv = self.app.delete('{}/reviews/{}/'.format(self.path, "noID"),
@@ -146,7 +147,7 @@ class TestReviewView(unittest.TestCase):
         """test creating a review"""
         rv = self.app.get('{}/places/{}/reviews/'.format(self.path, self.place,id), follow_redirects=True)
         review_args = {"text": "cage",
-                      "user_id": self.user.id, "id": "CA"}
+                      "user_id": self.user.id, "id": "RCA"}
         rv = self.app.post('{}/places/{}/reviews/'.format(self.path,
                                                          self.place.id),
                            content_type="application/json",
@@ -165,7 +166,7 @@ class TestReviewView(unittest.TestCase):
     def test_create_review_bad_json(self):
         """test creating a review with invalid json"""
         review_args = {"text": "cage",
-                      "user_id": self.user.id, "id": "CA"}
+                      "user_id": self.user.id, "id": "RCA"}
         rv = self.app.post('{}/places/{}/reviews/'.format(self.path,
                                                          self.place.id),
                            content_type="application/json",
@@ -176,7 +177,7 @@ class TestReviewView(unittest.TestCase):
 
     def test_create_review_no_text(self):
         """test creating a review without a text"""
-        review_args = {"user_id": self.user.id, "id": "CA"}
+        review_args = {"user_id": self.user.id, "id": "RCA"}
         rv = self.app.post('{}/places/{}/reviews/'.format(
             self.path, self.place.id),
                            content_type="application/json",
@@ -187,7 +188,7 @@ class TestReviewView(unittest.TestCase):
 
     def test_create_review_no_user_id(self):
         """test creating a review without a user_id"""
-        review_args = {"text": "cage", "id": "CA"}
+        review_args = {"text": "cage", "id": "RCA"}
         rv = self.app.post('{}/places/{}/reviews/'.format(
             self.path, self.place.id),
                            content_type="application/json",
@@ -198,7 +199,7 @@ class TestReviewView(unittest.TestCase):
 
     def test_create_review_bad_user_id(self):
         """test creating a review without a valid user_id"""
-        review_args = {"text": "cage", "user_id": "noID", "id": "CA"}
+        review_args = {"text": "cage", "user_id": "noID", "id": "RCA"}
         rv = self.app.post('{}/places/{}/reviews/'.format(
             self.path, self.place.id),
                            content_type="application/json",
@@ -208,7 +209,7 @@ class TestReviewView(unittest.TestCase):
 
     def test_create_review_bad_place_id(self):
         """test creating a place with not matching state"""
-        review_args = {"text": "cage", "user_id": "noID", "id": "CA"}
+        review_args = {"text": "cage", "user_id": "noID", "id": "RCA"}
         rv = self.app.post('{}/places /{}/reviews/'.format(
             self.path, "noID"),
                            content_type="application/json",
@@ -219,7 +220,7 @@ class TestReviewView(unittest.TestCase):
     def test_update_review_text(self):
         """test updating a review"""
         review_args = {"text": "strong cage", "place_id": self.place.id,
-                      "user_id": self.user.id, "id": "CA"}
+                      "user_id": self.user.id, "id": "RCA"}
         review = Review(**review_args)
         review.save()
         rv = self.app.put('{}/reviews/{}/'.format(self.path, review.id),
@@ -238,7 +239,7 @@ class TestReviewView(unittest.TestCase):
     def test_update_review_id(self):
         """test cannot update review id"""
         review_args = {"text": "cage", "place_id": self.place.id,
-                      "user_id": self.user.id, "id": "CA"}
+                      "user_id": self.user.id, "id": "RCA"}
         review = Review(**review_args)
         review.save()
         rv = self.app.put('{}/reviews/{}/'.format(self.path, review.id),
@@ -257,7 +258,7 @@ class TestReviewView(unittest.TestCase):
     def test_update_review_place_id(self):
         """test cannot update review place_id"""
         review_args = {"text": "cage", "place_id": self.place.id,
-                      "user_id": self.user.id, "id": "CA"}
+                      "user_id": self.user.id, "id": "RCA"}
         review = Review(**review_args)
         review.save()
         rv = self.app.put('{}/reviews/{}/'.format(self.path, review.id),
@@ -276,7 +277,7 @@ class TestReviewView(unittest.TestCase):
     def test_update_review_user_id(self):
         """test cannot update review user_id"""
         review_args = {"text": "cage", "place_id": self.place.id,
-                      "user_id": self.user.id, "id": "CA"}
+                      "user_id": self.user.id, "id": "RCA"}
         review = Review(**review_args)
         review.save()
         rv = self.app.put('{}/reviews/{}/'.format(self.path, review.id),
@@ -295,7 +296,7 @@ class TestReviewView(unittest.TestCase):
     def test_update_review_bad_json(self):
         """test update with ill formed json"""
         review_args = {"text": "cage", "place_id": self.place.id,
-                      "user_id": self.user.id, "id": "CA"}
+                      "user_id": self.user.id, "id": "RCA"}
         review = Review(**review_args)
         review.save()
         rv = self.app.put('{}/reviews/{}/'.format(self.path, review.id),
@@ -309,7 +310,7 @@ class TestReviewView(unittest.TestCase):
     def test_update_place_bad_id(self):
         """test update with no matching id"""
         review_args = {"text": "cage", "place_id": self.place.id,
-                      "user_id": self.user.id, "id": "CA"}
+                      "user_id": self.user.id, "id": "RCA"}
         review = Review(**review_args)
         review.save()
         rv = self.app.put('{}/reviews/{}/'.format(self.path, "noID"),

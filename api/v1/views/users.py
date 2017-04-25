@@ -8,8 +8,8 @@ from flask import (abort, jsonify, make_response, request)
 def view_user(user_id=None):
     """view user"""
     if user_id is None:
-        all_users = [state.to_json() for state \
-                      in storage.all("User").values()]
+        all_users = [state.to_json() for state
+                     in storage.all("User").values()]
         return jsonify(all_users)
     s = storage.get("User", user_id)
     if s is None:
