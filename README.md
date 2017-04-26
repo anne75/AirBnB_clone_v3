@@ -6,7 +6,18 @@ The purpose of this project is to recreate the AirBnB site, from the back-end da
 
 
 <h4>third phase</h4>
-Build an API.
+Build an API. To implement, run the API module. Current implmentation requires an existing database in mysql. 
+
+Run at the root of the folder
+<pre><code>
+HBNB_MYSQL_USER=hbnb_dev HBNB_MYSQL_PWD=hbnb_dev_pwd HBNB_MYSQL_HOST=localhost HBNB_MYSQL_DB=hbnb_dev_db HBNB_TYPE_STORAGE=db HBNB_API_HOST=0.0.0.0 HBNB_API_PORT=5000 python3 -m api.v1.app
+</code></pre>
+Expected response:
+<pre><code>
+ * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+...
+</code></pre>
+ A list of all the possible routes are avaiable on Flassger's application, here. <a href="http://0.0.0.0:5000/apidocs/">here</a>. 
 
 <h4>second phase</h4>
 Command line interpretor can now save objects into a mysql database by setting the following environmental variables. The database schema is <a href="https://s3.amazonaws.com/intranet-projects-files/holbertonschool-higher-level_programming+/289/AirBnb_DB_diagramm.jpg">here</a> and below.
