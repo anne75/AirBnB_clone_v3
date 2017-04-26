@@ -4,6 +4,7 @@
 
 The purpose of this project is to recreate the AirBnB site, from the back-end data management to the front-end user interface. 
 
+<img src=""https://s3.amazonaws.com/intranet-projects-files/holbertonschool-higher-level_programming+/289/AirBnb_DB_diagramm.jpg"" alt="HBnB Class Relationship">
 <h4>third phase</h4>
 Build an API.
 
