@@ -17,9 +17,9 @@ Expected response:
  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
 ...
 </code></pre>
-A list of all the possible routes and their respective routes are avaiable on Flassger's application, <a href="http://0.0.0.0:5000/apidocs/">here</a>. 
+A list of all the possible routes and their respective routes are available on Flasgger's application, <a href="http://0.0.0.0:5000/apidocs/">here</a>. 
 
-Input route for specific api request and avaliable route below.
+Input route for specific api request and available route below.
 
 http://0.0.0.0:5000/api/v1/{Route}
 
