@@ -42,6 +42,8 @@ class Test_FileStorage(unittest.TestCase):
                 nb_states += 1
         self.assertEqual(len(self.store.all("State")), nb_states)
 
+# should test with a bad class name
+
     def test_new(self):
         # note: we cannot assume order of test is order written
         test_len = len(self.store.all())

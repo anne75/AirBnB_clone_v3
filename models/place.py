@@ -76,7 +76,7 @@ class Place(BaseModel, Base):
         price_by_night = 0
         latitude = 0.0
         longitude = 0.0
-        amenities = []
+        amenities_id = []
 
     def __init__(self, *args, **kwargs):
         """
@@ -93,4 +93,17 @@ class Place(BaseModel, Base):
             """
             all_reviews = models.storage.all("Review").values()
             result = [r for r in all_reviews if r.place_id == self.id]
+            return result
+
+    if getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
+        @property
+        def amenities(self):
+            """
+            lists all amenities for a place
+            """
+            result = []
+            for a in self.amenities_id:
+                b = models.storage.get("Amenity", a)
+                if b is not None:
+                    result.append(b)
             return result
