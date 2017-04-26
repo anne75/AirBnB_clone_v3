@@ -95,18 +95,21 @@ def list_places():
         return "Not a JSON", 400
     all_cities = r.get("cities")
     states = r.get("states")
-    if states is not None:
+    if states is not None and states:
             all_states = [storage.get("State", s) for s in states]
-            if all_cities is None:
-                all_cities = [c.id for s in all_states for c in s.cities]
-            else:
-                all_cities += [c.id for s in all_states for c in s.cities]
+            all_states = [a for a in all_states if a is not None]
+            if all_states:
+                if all_cities is None:
+                    all_cities = [c.id for s in all_states for c in s.cities]
+                else:
+                    all_cities += [c.id for s in all_states for c in s.cities]
     all_cities = set(all_cities)
+    return jsonify('\n'.join(all_cities))
     all_amenities = r.get("amenities")
     all_places = storage.all("Place").values()
-    if all_cities is not None:
+    if all_cities is not None and all_cities:
         all_places = [p for p in all_places if p.city_id in all_cities]
-    if all_amenities is not None:
+    if all_amenities is not None and all_amenities:
         if os.getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
             all_places = [p for p in all_places if
                           set(all_amenities) <= set(p.amenities_id)]
@@ -125,3 +128,4 @@ def list_places():
                     all_places.append(e)
     res = [e.to_json() for e in all_places]
     return jsonify(res)
+# what to do for junk states, cities, amenities
