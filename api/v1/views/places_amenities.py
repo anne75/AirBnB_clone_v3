@@ -8,7 +8,7 @@ from os import getenv
 from sqlalchemy import inspect
 
 if getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
-# FILE STORAGE
+    # FILE STORAGE
     @app_views.route('/places/<place_id>/amenities', methods=['GET'],
                      strict_slashes=False)
     def view_amenities_in_place(place_id):
@@ -50,7 +50,7 @@ if getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
         return jsonify(amenity.to_json()), 201
 
 else:
-# DB STORAGE
+    # DB STORAGE
     @app_views.route('/places/<place_id>/amenities', methods=['GET'],
                      strict_slashes=False)
     def view_amenities_in_place(place_id):
