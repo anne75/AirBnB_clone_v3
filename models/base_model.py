@@ -95,8 +95,8 @@ class BaseModel:
         dupe["__class__"] = type(self).__name__
         if not saving:
             dupe.pop("password", None)
-        else:
-            value = dupe.pop("password", None)
+        dupe.pop("amenities", None)
+        dupe.pop("amenities_id", None)
         return dupe
 
 
