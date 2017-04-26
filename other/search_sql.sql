@@ -14,3 +14,7 @@ WHERE places.city_id in (
       WHERE cities.name in ("Urbana", "Chicago", "Peoria", "Naperville", "San Francisco", "Fremont", "San Jose", "Sonoma", "New Orleans", "Baton Rouge", "Meridian", "Miami", "Tempe", "Calera", "Akron", "Portland"));
 
 --main 2
+
+
+--main 3
+select count(*) from place_amenity where amenity_id in (select id from amenities where name = "Wireless Internet");
