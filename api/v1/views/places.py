@@ -480,39 +480,39 @@ def list_places():
         r = None
     if r is None:
         return "Not a JSON", 400
-    all_cities = r.get("cities")
+    if not r:
+        return jsonify([e.to_json() for e in storage.all("Place").values()])
+
+    all_cities_id = r.get("cities", [])
     states = r.get("states")
-    if states is not None and states:
-            all_states = [storage.get("State", s) for s in states]
-            all_states = [a for a in all_states if a is not None]
-            if all_states:
-                if all_cities is None:
-                    all_cities = [c.id for s in all_states for c in s.cities]
-                else:
-                    all_cities += [c.id for s in all_states for c in s.cities]
-    all_cities = set(all_cities)
-    return jsonify('\n'.join(all_cities))
-    all_amenities = r.get("amenities")
-    all_places = storage.all("Place").values()
-    if all_cities is not None and all_cities:
-        all_places = [p for p in all_places if p.city_id in all_cities]
-    if all_amenities is not None and all_amenities:
-        if os.getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
-            all_places = [p for p in all_places if
-                          set(all_amenities) <= set(p.amenities_id)]
-        else:
-            tmp = all_places[:]
-            all_places = []
-            for e in tmp:
-                flag = True
-                for a in all_amenities:
-                    if a not in [i.id for i in e.amenities]:
-                        flag = False
-                        break
-                if flag:
-                    # using amenities make it instance attribute,
-                    # not just class check out to_json
-                    all_places.append(e)
-    res = [e.to_json() for e in all_places]
-    return jsonify(res)
+    if states:
+        all_states = [storage.get("State", s) for s in states]
+        all_states = [a for a in all_states if a is not None]
+        all_cities_id += [c.id for s in all_states for c in s.cities]
+    all_cities_id = list(set(all_cities_id))
+
+    if not all_cities_id:
+        all_places = []
+    else:
+        all_places = storage.all("Place").values()
+        all_places = [p for p in all_places if p.city_id in all_cities_id]
+        all_amenities = r.get("amenities")
+        if all_amenities:
+            if os.getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
+                all_places = [p for p in all_places if
+                              set(all_amenities) <= set(p.amenities_id)]
+            else:
+                tmp = all_places[:]
+                all_places = []
+                for e in tmp:
+                    flag = True
+                    for a in all_amenities:
+                        if a not in [i.id for i in e.amenities]:
+                            flag = False
+                            break
+                        if flag:
+                                # using amenities make it instance attribute,
+                                # not just class check out to_json
+                            all_places.append(e)
+    return jsonify([e.to_json() for e in all_places])
 # what to do for junk states, cities, amenities
