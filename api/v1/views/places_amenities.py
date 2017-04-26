@@ -8,7 +8,7 @@ from os import getenv
 from sqlalchemy import inspect
 
 if getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
-
+    # FILE STORAGE
     @app_views.route('/places/<place_id>/amenities', methods=['GET'],
                      strict_slashes=False)
     def view_amenities_in_place(place_id):
@@ -16,7 +16,7 @@ if getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
         place = storage.get("Place", place_id)
         if place is None:
             abort(404)
-        result = [storage.get("Amenity", i) for i in place.amenities]
+        result = [a.to_json() for a in place.amenities]
         return jsonify(result)
 
     @app_views.route('/places/<place_id>/amenities/<amenity_id>',
@@ -24,13 +24,14 @@ if getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
     def delete_placeamenity(place_id=None, amenity_id=None):
         """deletes an amenity"""
         place = storage.get("Place", place_id)
-        if place is None:
+        if (place is None) or (amenity_id is None):
             abort(404)
-        if amenity_id is not None:
-            place.amenities = [e for e in place.amenities if
-                               e != amenity_id]
+        if amenity_id not in place.amenities_id:
+            abort(404)
+        else:
+            place.amenities_id.remove(amenity_id)
             place.save()
-        return jsonify({}), 200
+            return jsonify({}), 200
 
     @app_views.route('/places/<place_id>/amenities/<amenity_id>',
                      methods=['POST'], strict_slashes=False)
@@ -42,14 +43,14 @@ if getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
         amenity = storage.get("Amenity", amenity_id)
         if amenity is None:
             return "Bad amenity", 404
-        if amenity_id in [a for a in place.amenities]:
+        if amenity_id in place.amenities_id:
             return jsonify(amenity.to_json()), 200
         place.amenities.append(amenity_id)
         place.save()
         return jsonify(amenity.to_json()), 201
 
 else:
-
+    # DB STORAGE
     @app_views.route('/places/<place_id>/amenities', methods=['GET'],
                      strict_slashes=False)
     def view_amenities_in_place(place_id):

@@ -92,25 +92,19 @@ def list_places():
         r = None
     if r is None:
         return "Not a JSON", 400
-    all_cities = storage.all("City").values()
-    cities = r.get("cities")
-    if cities is not None:
-        all_cities = [c for c in all_cities if c.id in cities]
+    all_cities = r.get("cities")
     states = r.get("states")
     if states is not None:
-        if cities is None:
-            all_states = storage.all("State").values()
-            all_cities = [c for s in all_states for c in s.cities]
-        else:
-            all_cities = [c for c in all_cities if c.state_id in states]
-    all_cities = [c.id for c in all_cities]
-    all_amenities = [e for e in storage.all("Amenity").keys()]
-    amenities = r.get("amenities")
-    if amenities is not None:
-        all_amenities = [a for a in all_amenities if a in amenities]
-    all_places = storage.all("Place")
-    if (cities is not None) or (states is not None):
+            all_states = [storage.get("State", s) for s in states]
+            if all_cities is None:
+                all_cities = [c.id for s in all_states for c in s.cities]
+            else:
+                all_cities += [c.id for s in all_states for c in s.cities]
+    all_cities = set(all_cities)
+    all_amenities = r.get("amenities")
+    all_places = storage.all("Place").values()
+    if all_cities is not None:
         all_places = [p for p in all_places if p.city_id in all_cities]
-    if amenities is not None:
+    if all_amenities is not None:
         all_places = [p for p in all_places if p.amenities == all_amenities]
     return jsonify([p.to_json() for p in all_places])

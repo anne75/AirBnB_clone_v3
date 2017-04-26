@@ -54,8 +54,10 @@ class DBStorage:
         """
         orm_objects = {}
         if cls:
-            for k in self.__session.query(self.__models_available[cls]):
-                orm_objects[k.__dict__['id']] = k
+            if cls in self.__models_available:
+                for k in self.__session.query(
+                        self.__models_available.get(cls)):
+                    orm_objects[k.__dict__['id']] = k
         else:
             for i in self.__models_available.values():
                 j = self.__session.query(i).all()
