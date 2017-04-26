@@ -121,8 +121,7 @@ def list_places():
                         break
                 if flag:
                     # using amenities make it instance attribute,
-                    # not just class
-                    e.__dict__.pop("amenities", None)
+                    # not just class check out to_json
                     all_places.append(e)
     res = [e.to_json() for e in all_places]
     return jsonify(res)
