@@ -46,12 +46,24 @@ class TestStateView(unittest.TestCase):
         self.assertIn(state_args["name"], [e.get("name") for e in json_format])
         storage.delete(state)
 
+    def test_getstates_empty_db(self):
+        """test listing all states in empty db"""
+        s = storage.all("State").values()
+        for e in s:
+            storage.delete(e)
+        rv = self.app.get('{}/states/'.format(self.path))
+        self.assertEqual(rv.status_code, 200)
+        self.assertEqual(rv.headers.get("Content-Type"), "application/json")
+        json_format = getJson(rv)
+        self.assertTrue(type(json_format), list)
+        self.assertEqual(json_format, [])
+
     def test_view_one_state(self):
         """test retrieving one state"""
         state_args = {"name": "Zanzibar", "id": "ZA3"}
         state = State(**state_args)
         state.save()
-        rv = self.app.get('{}/states/{}'.format(self.path, state_args["id"]))
+        rv = self.app.get('{}/states/{}/'.format(self.path, state_args["id"]))
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.headers.get("Content-Type"), "application/json")
         json_format = getJson(rv)
@@ -64,7 +76,7 @@ class TestStateView(unittest.TestCase):
         state_args = {"name": "Zanzibar", "id": "ZA1"}
         state = State(**state_args)
         state.save()
-        rv = self.app.get('{}/states/{}'.format(self.path, "noID"))
+        rv = self.app.get('{}/states/{}/'.format(self.path, "noID"))
         self.assertEqual(rv.status_code, 404)
         storage.delete(state)
 
@@ -117,6 +129,11 @@ class TestStateView(unittest.TestCase):
                            follow_redirects=True)
         self.assertEqual(rv.status_code, 400)
         self.assertEqual(rv.get_data(), b"Not a JSON")
+        rv = self.app.post('{}/states/'.format(self.path),
+                           content_type="application/x-www-form-urlencoded",
+                           data=state_args,
+                           follow_redirects=True)
+        self.assertEqual(rv.status_code, 400)
 
     def test_create_state_no_name(self):
         """test creating a state without a name"""

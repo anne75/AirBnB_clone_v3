@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+"""
+This module contains the BaseModel class:
+All classes should inherit from this class
+"""
 from datetime import datetime
 import uuid
 import models
@@ -6,10 +10,7 @@ from sqlalchemy import Column, Integer, String, Table, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from os import getenv
 import uuid
-"""
-This module contains the BaseModel class:
-All classes should inherit from this class
-"""
+
 if getenv('HBNB_TYPE_STORAGE', 'fs') == 'db':
     Base = declarative_base()
 else:
@@ -96,8 +97,6 @@ class BaseModel:
             dupe.pop("password", None)
         else:
             value = dupe.pop("password", None)
-            if value is not None:
-                dupe["password"] = value.hexdigest()
         return dupe
 
 

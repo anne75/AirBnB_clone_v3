@@ -6,8 +6,9 @@ from api.v1.views import (app_views, Amenity, storage)
 from flask import (abort, jsonify, make_response, request)
 
 
-@app_views.route('/amenities/', methods=['GET'])
-@app_views.route('/amenities/<amenity_id>/', methods=['GET'])
+@app_views.route('/amenities', methods=['GET'], strict_slashes=False)
+@app_views.route('/amenities/<amenity_id>', methods=['GET'],
+                 strict_slashes=False)
 def view_amenity(amenity_id=None):
     """view amenity"""
     if amenity_id is None:
@@ -20,7 +21,8 @@ def view_amenity(amenity_id=None):
     return jsonify(s.to_json())
 
 
-@app_views.route('/amenities/<amenity_id>/', methods=['DELETE'])
+@app_views.route('/amenities/<amenity_id>', methods=['DELETE'],
+                 strict_slashes=False)
 def delete_amenity(amenity_id=None):
     """deletes an amenity"""
     amenity = storage.get("Amenity", amenity_id)
@@ -30,12 +32,14 @@ def delete_amenity(amenity_id=None):
     return jsonify({}), 200
 
 
-@app_views.route('/amenities/', methods=['POST'])
+@app_views.route('/amenities', methods=['POST'], strict_slashes=False)
 def create_amenity():
     """create an amenity"""
     try:
         r = request.get_json()
     except:
+        r = None
+    if r is None:
         return "Not a JSON", 400
     if 'name' not in r.keys():
         return "Missing name", 400
@@ -44,11 +48,14 @@ def create_amenity():
     return jsonify(s.to_json()), 201
 
 
-@app_views.route('/amenities/<amenity_id>/', methods=['PUT'])
+@app_views.route('/amenities/<amenity_id>', methods=['PUT'],
+                 strict_slashes=False)
 def update_amenity(amenity_id=None):
     try:
         r = request.get_json()
     except:
+        r = None
+    if r is None:
         return "Not a JSON", 400
     a = storage.get("Amenity", amenity_id)
     if a is None:

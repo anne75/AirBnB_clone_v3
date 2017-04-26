@@ -1,6 +1,6 @@
 from datetime import datetime
 from models import *
-from models.place import PlaceAmenity
+# from models.place import PlaceAmenity
 import os
 import unittest
 
@@ -146,52 +146,53 @@ class Test_PlaceModel(unittest.TestCase):
         storage.delete(place)
 
 
-@unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE', 'fs') != 'db', "db")
-class Test_PlaceAmenityModel(unittest.TestCase):
-    """
-    Test the place amenity model class
-    """
+# @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE', 'fs') != 'db', "db")
+# class Test_PlaceAmenityModel(unittest.TestCase):
+#     """
+#     Test the place amenity model class
+#     """
 
-    def test_save(self):
-        """creates and save a PlaceAmenity object"""
-        test_user = {'id': "002",
-                     'email': "you@g.com",
-                     'password': "1234",
-                     'first_name': "TEST",
-                     'last_name': "REVIEW"}
-        user = User(**test_user)
-        test_state = {'id': "001",
-                      'created_at': datetime(2017, 2, 12, 00, 31, 55, 331997),
-                      'name': "TEST STATE FOR CITY"}
-        state = State(**test_state)
-        test_city = {'id': "005",
-                     'name': "CITY SET UP",
-                     'state_id': "001"}
-        city = City(**test_city)
-        test_place = {'id': "002",
-                      'city_id': "005",
-                      'user_id': "002",
-                      'name': "TEST REVIEW",
-                      'description': "blah blah",
-                      'number_rooms': 4,
-                      'number_bathrooms': 2,
-                      'max_guest': 4,
-                      'price_by_night': 23,
-                      'latitude': 45.5,
-                      'longitude': 23.4}
-        place = Place(**test_place)
-        test_amenity = {'id': "010",
-                        'name': "TEST place_amenities"}
-        amenity = Amenity(**test_amenity)
-        pla = PlaceAmenity(place_id="002", amenity_id="010")
-        user.save()
-        state.save()
-        city.save()
-        place.save()
-        amenity.save()
-        storage._DBStorage__session.add(pla)
-        tmp = storage._DBStorage__session.query(PlaceAmenity).one()
-        storage._DBStorage__session.delete(tmp)
+#     def test_save(self):
+#         """creates and save a PlaceAmenity object"""
+#         test_user = {'id': "002",
+#                      'email': "you@g.com",
+#                      'password': "1234",
+#                      'first_name': "TEST",
+#                      'last_name': "REVIEW"}
+#         user = User(**test_user)
+#         test_state = {'id': "001",
+#                       'created_at': datetime(2017, 2, 12, 00,
+#                                              31, 55, 331997),
+#                       'name': "TEST STATE FOR CITY"}
+#         state = State(**test_state)
+#         test_city = {'id': "005",
+#                      'name': "CITY SET UP",
+#                      'state_id': "001"}
+#         city = City(**test_city)
+#         test_place = {'id': "002",
+#                       'city_id': "005",
+#                       'user_id': "002",
+#                       'name': "TEST REVIEW",
+#                       'description': "blah blah",
+#                       'number_rooms': 4,
+#                       'number_bathrooms': 2,
+#                       'max_guest': 4,
+#                       'price_by_night': 23,
+#                       'latitude': 45.5,
+#                       'longitude': 23.4}
+#         place = Place(**test_place)
+#         test_amenity = {'id': "010",
+#                         'name': "TEST place_amenities"}
+#         amenity = Amenity(**test_amenity)
+#         pla = PlaceAmenity(place_id="002", amenity_id="010")
+#         user.save()
+#         state.save()
+#         city.save()
+#         place.save()
+#         amenity.save()
+#         storage._DBStorage__session.add(pla)
+#         tmp = storage._DBStorage__session.query(PlaceAmenity).one()
+#         storage._DBStorage__session.delete(tmp)
         # storage.delete(amenity) ???, foreign key constraint on empty set
         # storage.delete(place)
         # storage.delete(user)

@@ -6,7 +6,8 @@ from api.v1.views import (app_views, Review, storage)
 from flask import (abort, jsonify, request)
 
 
-@app_views.route("/places/<place_id>/reviews/", methods=["GET"])
+@app_views.route("/places/<place_id>/reviews", methods=["GET"],
+                 strict_slashes=False)
 def all_reviews(place_id):
     """
     returns a list of all the reviews
@@ -18,7 +19,8 @@ def all_reviews(place_id):
     return jsonify(reviews)
 
 
-@app_views.route("/reviews/<review_id>/", methods=["GET"])
+@app_views.route("/reviews/<review_id>", methods=["GET"],
+                 strict_slashes=False)
 def one_review(review_id):
     """
     returns one review
@@ -29,7 +31,8 @@ def one_review(review_id):
     return jsonify(review.to_json())
 
 
-@app_views.route("/reviews/<review_id>/", methods=["DELETE"])
+@app_views.route("/reviews/<review_id>", methods=["DELETE"],
+                 strict_slashes=False)
 def delete_one_review(review_id):
     """
     deletes one city
@@ -43,7 +46,8 @@ def delete_one_review(review_id):
     return jsonify({}), 200
 
 
-@app_views.route("/places/<place_id>/reviews/", methods=["POST"])
+@app_views.route("/places/<place_id>/reviews", methods=["POST"],
+                 strict_slashes=False)
 def create_review(place_id):
     """
     creates one review
@@ -55,6 +59,8 @@ def create_review(place_id):
     try:
         r = request.get_json()
     except:
+        r = None
+    if r is None:
         return "Not a JSON", 400
     if "user_id" not in r.keys():
         return "Missing user_id", 400
@@ -72,7 +78,8 @@ def create_review(place_id):
     return jsonify(review.to_json()), 201
 
 
-@app_views.route("/reviews/<review_id>/", methods=["PUT"])
+@app_views.route("/reviews/<review_id>", methods=["PUT"],
+                 strict_slashes=False)
 def update_review(review_id):
     """
     Body of http request seems to only to contain text
@@ -86,6 +93,8 @@ def update_review(review_id):
     try:
         r = request.get_json()
     except:
+        r = None
+    if r is None:
         return "Not a JSON", 400
     for k in ("id", "user_id", "place_id", "created_at", "updated_at"):
         r.pop(k, None)

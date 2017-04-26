@@ -21,6 +21,7 @@ class City(BaseModel, Base):
         name = Column(String(128), nullable=False)
         places = relationship("Place", backref="city",
                               cascade="all, delete, delete-orphan")
+        __mapper_args__ = {"confirm_deleted_rows": False}
     else:
         name = ""
         state_id = ""
