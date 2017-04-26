@@ -8,33 +8,43 @@ from flask import (abort, jsonify, make_response, request)
 
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
 def view_all_states():
-    """Example endpoint returning a list of colors by palette
-    This is using docstrings for specifications.
+    """Example endpoint returning a list of all the states
+    Retrieves a list of all the states
     ---
-    parameters:
-      - name: palette
-        in: path
-        type: string
-        enum: ['all', 'rgb', 'cmyk']
-        required: true
-        default: all
     definitions:
-      Palette:
+      State:
         type: object
         properties:
-          palette_name:
-            type: array
+          __class__:
+            type: string
+            description: The string of class object
+          created_at:
+            type: string
+            description: The date the object created
+          id:
+            type: string
+            description: the id of the state
+          name:
+            type: string
+            description: name of the state
+          updated_at:
+            type: string
+            description: The date the object was updated
             items:
               $ref: '#/definitions/Color'
+
       Color:
         type: string
     responses:
       200:
-        description: A list of colors (may be filtered by palette)
+        description: A list of dictionarys, each dict is a State
         schema:
-          $ref: '#/definitions/Palette'
+          $ref: '#/definitions/State'
         examples:
-          rgb: ['red', 'green', 'blue']
+            [{'__class__': 'State', 'created_at': '2017-03-25T02:17:06',
+            'id': '10098698-bace-4bfb-8c0a-6bae0f7f5b8f', 'name': 'Oregon',
+            'updated_at': '2017-03-25T02:17:06'}]
+
     """
     all_states = [state.to_json() for state in storage.all("State").values()]
     return jsonify(all_states)
@@ -42,7 +52,50 @@ def view_all_states():
 
 @app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
 def view_one_state(state_id=None):
-    """retrieves one state"""
+    """Example endpoint returning a list of one state
+    Retrieves a state by a given id
+    ---
+    parameters:
+      - name: state_id
+        in: path
+        type: string
+        enum: ['None', '10098698-bace-4bfb-8c0a-6bae0f7f5b8f']
+        required: true
+        default: None
+    definitions:
+      State:
+        type: object
+        properties:
+          __class__:
+            type: string
+            description: The string of class object
+          created_at:
+            type: string
+            description: The date the object created
+          id:
+            type: string
+            description: the id of the state
+          name:
+            type: string
+            description: name of the state
+          updated_at:
+            type: string
+            description: The date the object was updated
+            items:
+              $ref: '#/definitions/Color'
+      Color:
+        type: string
+    responses:
+      200:
+        description: A list of one dictionary of the desired State object
+        schema:
+          $ref: '#/definitions/State'
+        examples:
+            [{'__class__': 'State', 'created_at': '2017-03-25T02:17:06',
+            'id': '10098698-bace-4bfb-8c0a-6bae0f7f5b8f', 'name': 'Oregon',
+            'updated_at': '2017-03-25T02:17:06'}]
+
+    """
     if state_id is None:
         abort(404)
     state = storage.get("State", state_id)
@@ -54,7 +107,25 @@ def view_one_state(state_id=None):
 @app_views.route('/states/<state_id>', methods=['DELETE'],
                  strict_slashes=False)
 def delete_state(state_id=None):
-    """deletes a state"""
+    """Example endpoint deleting one state
+    Deletes a state based on the state_id
+    ---
+    definitions:
+      State:
+        type: object
+      Color:
+        type: string
+      items:
+        $ref: '#/definitions/Color'
+
+    responses:
+      200:
+        description: An empty dictionary
+        schema:
+          $ref: '#/definitions/State'
+        examples:
+            {}
+    """
     if state_id is None:
         abort(404)
     state = storage.get("State", state_id)
@@ -66,6 +137,42 @@ def delete_state(state_id=None):
 
 @app_views.route('/states', methods=['POST'], strict_slashes=False)
 def create_state():
+    """Example endpoint creating a state
+    Creates a State object based on the JSON body
+    ---
+    definitions:
+      State:
+        type: object
+        properties:
+          __class__:
+            type: string
+            description: The string of class object
+          created_at:
+            type: string
+            description: The date the object created
+          id:
+            type: string
+            description: the id of the state
+          name:
+            type: string
+            description: name of the state
+          updated_at:
+            type: string
+            description: The date the object was updated
+            items:
+              $ref: '#/definitions/Color'
+      Color:
+        type: string
+    responses:
+      201:
+        description: A list of a single dictionary of a State
+        schema:
+          $ref: '#/definitions/State'
+        examples:
+            [{'__class__': 'State', 'created_at': '2017-03-25T02:17:06',
+            'id': '10098698-bace-4bfb-8c0a-6bae0f7f5b8f', 'name': 'Oregon',
+            'updated_at': '2017-03-25T02:17:06'}]
+    """
     r = None
     try:
         r = request.get_json()
@@ -82,6 +189,49 @@ def create_state():
 
 @app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
 def update_state(state_id=None):
+    """Example endpoint updates a state
+    Updates a State object based on the JSON body
+    ---
+    parameters:
+      - name: state_id
+        in: path
+        type: string
+        enum: ['None', '10098698-bace-4bfb-8c0a-6bae0f7f5b8f']
+        required: true
+        default: None
+    definitions:
+      State:
+        type: object
+        properties:
+          __class__:
+            type: string
+            description: The string of class object
+          created_at:
+            type: string
+            description: The date the object created
+          id:
+            type: string
+            description: the id of the state
+          name:
+            type: string
+            description: name of the state
+          updated_at:
+            type: string
+            description: The date the object was updated
+            items:
+              $ref: '#/definitions/Color'
+      Color:
+        type: string
+    responses:
+      201:
+        description: A list of a single dictionary of a State
+        schema:
+          $ref: '#/definitions/State'
+        examples:
+            [{'__class__': 'State', 'created_at': '2017-03-25T02:17:06',
+            'id': '10098698-bace-4bfb-8c0a-6bae0f7f5b8f', 'name': 'Oregon',
+            'updated_at': '2017-03-25T02:17:06'}]
+    """
     try:
         r = request.get_json()
     except:

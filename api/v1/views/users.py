@@ -9,7 +9,59 @@ from flask import (abort, jsonify, make_response, request)
 @app_views.route('/users', methods=['GET'], strict_slashes=False)
 @app_views.route('/users/<user_id>', methods=['GET'], strict_slashes=False)
 def view_user(user_id=None):
-    """view user"""
+    """Example endpoint returning a list of all users or of one specified
+    Retrieves a list of all users or of one specified by user_id
+    ---
+    parameters:
+      - name: user_id
+        in: path
+        type: string
+        enum: ["all", "32c11d3d-99a1-4406-ab41-7b6ccb7dd760"]
+        required: true
+        default: None
+
+    definitions:
+
+      User:
+        type: object
+        properties:
+          __class__:
+            type: string
+            description: The string of class object
+          created_at:
+            type: string
+            description: The date the object created
+          email:
+            type: string
+          first_name:
+            type: string
+          last_name:
+            type: string
+          id:
+            type: string
+            description: the id of the user
+          updated_at:
+            type: string
+            description: The date the object was updated
+            items:
+              $ref: '#/definitions/Color'
+      Color:
+        type: string
+    responses:
+      200:
+        description: A list of dictionarys or dictionary, each dict is a user
+        schema:
+          $ref: '#/definitions/User'
+        examples:
+            [{"__class__": "User",
+              "_password": "pwd18",
+              "created_at": "2017-03-25T02:17:06",
+              "email": "noemail18@gmail.com",
+              "first_name": "Susan",
+              "id": "32c11d3d-99a1-4406-ab41-7b6ccb7dd760",
+              "last_name": "Finney",
+              "updated_at": "2017-03-25T02:17:06"}]
+    """
     if user_id is None:
         all_users = [state.to_json() for state
                      in storage.all("User").values()]
@@ -22,7 +74,25 @@ def view_user(user_id=None):
 
 @app_views.route('/users/<user_id>', methods=['DELETE'], strict_slashes=False)
 def delete_user(user_id=None):
-    """deletes an user"""
+    """Example endpoint deleting one user
+    Deletes a user based on the user_id
+    ---
+    definitions:
+      User:
+        type: object
+      Color:
+        type: string
+      items:
+        $ref: '#/definitions/Color'
+
+    responses:
+      200:
+        description: An empty dictionary
+        schema:
+          $ref: '#/definitions/User'
+        examples:
+            {}
+    """
     user = storage.get("User", user_id)
     if user is None:
         abort(404)
@@ -32,7 +102,51 @@ def delete_user(user_id=None):
 
 @app_views.route('/users', methods=['POST'], strict_slashes=False)
 def create_user():
-    """create an user"""
+    """Example endpoint creates a user
+    Creates a user based on the JSON body
+    ---
+    definitions:
+
+      User:
+        type: object
+        properties:
+          __class__:
+            type: string
+            description: The string of class object
+          created_at:
+            type: string
+            description: The date the object created
+          email:
+            type: string
+          first_name:
+            type: string
+          last_name:
+            type: string
+          id:
+            type: string
+            description: the id of the user
+          updated_at:
+            type: string
+            description: The date the object was updated
+            items:
+              $ref: '#/definitions/Color'
+      Color:
+        type: string
+    responses:
+      201:
+        description: A list of a dictionary, each dict is a user
+        schema:
+          $ref: '#/definitions/User'
+        examples:
+            [{"__class__": "User",
+              "_password": "pwd18",
+              "created_at": "2017-03-25T02:17:06",
+              "email": "noemail18@gmail.com",
+              "first_name": "Susan",
+              "id": "32c11d3d-99a1-4406-ab41-7b6ccb7dd760",
+              "last_name": "Finney",
+              "updated_at": "2017-03-25T02:17:06"}]
+    """
     try:
         r = request.get_json()
     except:
@@ -50,6 +164,59 @@ def create_user():
 
 @app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
 def update_user(user_id=None):
+    """Example endpoint updates a user
+    Updates a user based on the JSON body
+    ---
+    parameters:
+      - name: user_id
+        in: path
+        type: string
+        enum: ["32c11d3d-99a1-4406-ab41-7b6ccb7dd760"]
+        required: true
+        default: "32c11d3d-99a1-4406-ab41-7b6ccb7dd760"
+
+    definitions:
+
+      User:
+        type: object
+        properties:
+          __class__:
+            type: string
+            description: The string of class object
+          created_at:
+            type: string
+            description: The date the object created
+          email:
+            type: string
+          first_name:
+            type: string
+          last_name:
+            type: string
+          id:
+            type: string
+            description: the id of the user
+          updated_at:
+            type: string
+            description: The date the object was updated
+            items:
+              $ref: '#/definitions/Color'
+      Color:
+        type: string
+    responses:
+      200:
+        description: A list of a dictionary, each dict is a user
+        schema:
+          $ref: '#/definitions/User'
+        examples:
+            [{"__class__": "User",
+              "_password": "pwd18",
+              "created_at": "2017-03-25T02:17:06",
+              "email": "noemail18@gmail.com",
+              "first_name": "Susan",
+              "id": "32c11d3d-99a1-4406-ab41-7b6ccb7dd760",
+              "last_name": "Finney",
+              "updated_at": "2017-03-25T02:17:06"}]
+    """
     try:
         r = request.get_json()
     except:

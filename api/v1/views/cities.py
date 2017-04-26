@@ -9,8 +9,59 @@ from flask import (abort, jsonify, request)
 @app_views.route("/states/<state_id>/cities", methods=["GET"],
                  strict_slashes=False)
 def state_all_cities(state_id):
-    """
-    Returns all the cities of a state or raise 404 error
+    """Example endpoint returning a list of all the cities of a state
+    Retrieves all the cities of a given state_id
+    ---
+    parameters:
+      - name: state_id
+        in: path
+        type: string
+        enum: ['None', '10098698-bace-4bfb-8c0a-6bae0f7f5b8f']
+        required: true
+        default: None
+    definitions:
+      City:
+        type: object
+        properties:
+          __class__:
+            type: string
+            description: The string of class object
+          created_at:
+            type: string
+            description: The date the object created
+          id:
+            type: string
+            description: the id of the city
+          name:
+            type: string
+            description: name of the city
+          state_id:
+            type: string
+            description: the id of the state
+          updated_at:
+            type: string
+            description: The date the object was updated
+            items:
+              $ref: '#/definitions/Color'
+      Color:
+        type: string
+    responses:
+      200:
+        description: A list of dictionaries of city object
+        schema:
+          $ref: '#/definitions/City'
+        examples:
+            [{"__class__": "City", "created_at": "2017-03-25T02:17:06",
+              "id": "1da255c0-f023-4779-8134-2b1b40f87683",
+              "name": "New Orleans",
+              "state_id": "2b9a4627-8a9e-4f32-a752-9a84fa7f4efd",
+              "updated_at": "2017-03-25T02:17:06"},
+             {"__class__": "City", "created_at": "2017-03-25T02:17:06",
+              "id": "45903748-fa39-4cd0-8a0b-c62bfe471702",
+              "name": "Lafayette",
+              "state_id": "2b9a4627-8a9e-4f32-a752-9a84fa7f4efd",
+              "updated_at": "2017-03-25T02:17:06"}]
+
     """
     state = storage.get("State", state_id)
     if state is None:
@@ -21,8 +72,53 @@ def state_all_cities(state_id):
 
 @app_views.route("/cities/<city_id>", methods=["GET"], strict_slashes=False)
 def one_city(city_id):
-    """
-    Returns one city or raise 404 error
+    """Example endpoint returning one city
+    Retrieves one city of a given city_id
+    ---
+    parameters:
+      - name: city_id
+        in: path
+        type: string
+        enum: ['None', '1da255c0-f023-4779-8134-2b1b40f87683']
+        required: true
+        default: None
+    definitions:
+      City:
+        type: object
+        properties:
+          __class__:
+            type: string
+            description: The string of class object
+          created_at:
+            type: string
+            description: The date the object created
+          id:
+            type: string
+            description: the id of the city
+          name:
+            type: string
+            description: name of the city
+          state_id:
+            type: string
+            description: the id of the state
+          updated_at:
+            type: string
+            description: The date the object was updated
+            items:
+              $ref: '#/definitions/Color'
+      Color:
+        type: string
+    responses:
+      200:
+        description: A list of a dictionary of a city object
+        schema:
+          $ref: '#/definitions/City'
+        examples:
+            [{"__class__": "City", "created_at": "2017-03-25T02:17:06",
+              "id": "1da255c0-f023-4779-8134-2b1b40f87683",
+              "name": "New Orleans",
+              "state_id": "2b9a4627-8a9e-4f32-a752-9a84fa7f4efd",
+              "updated_at": "2017-03-25T02:17:06"}]
     """
     city = storage.get("City", city_id)
     if city is None:
@@ -32,10 +128,24 @@ def one_city(city_id):
 
 @app_views.route("/cities/<city_id>", methods=["DELETE"], strict_slashes=False)
 def delete_one_city(city_id):
-    """
-    deletes one city
+    """Example endpoint deleting one city
+    Deletes a state based on the city_id
+    ---
+    definitions:
+      City:
+        type: object
+      Color:
+        type: string
+      items:
+        $ref: '#/definitions/Color'
 
-    returns: 200 and {} if success, 404 otherwise
+    responses:
+      200:
+        description: An empty dictionary
+        schema:
+          $ref: '#/definitions/City'
+        examples:
+            {}
     """
     city = storage.get("City", city_id)
     if city is None:
@@ -47,6 +157,54 @@ def delete_one_city(city_id):
 @app_views.route("/states/<state_id>/cities", methods=["POST"],
                  strict_slashes=False)
 def create_one_city(state_id):
+    """Example endpoint creating one city
+    Creates one city tied with the given state_id based on the JSON body
+    ---
+    parameters:
+      - name: city_id
+        in: path
+        type: string
+        enum: ['None', '10098698-bace-4bfb-8c0a-6bae0f7f5b8f']
+        required: true
+        default: None
+    definitions:
+      City:
+        type: object
+        properties:
+          __class__:
+            type: string
+            description: The string of class object
+          created_at:
+            type: string
+            description: The date the object created
+          id:
+            type: string
+            description: the id of the city
+          name:
+            type: string
+            description: name of the city
+          state_id:
+            type: string
+            description: the id of the state
+          updated_at:
+            type: string
+            description: The date the object was updated
+            items:
+              $ref: '#/definitions/Color'
+      Color:
+        type: string
+    responses:
+      201:
+        description: A list of a dictionary of a city object
+        schema:
+          $ref: '#/definitions/City'
+        examples:
+            [{"__class__": "City", "created_at": "2017-03-25T02:17:06",
+              "id": "1da255c0-f023-4779-8134-2b1b40f87683",
+              "name": "New Orleans",
+              "state_id": "2b9a4627-8a9e-4f32-a752-9a84fa7f4efd",
+              "updated_at": "2017-03-25T02:17:06"}]
+    """
     try:
         r = request.get_json()
     except:
@@ -67,6 +225,54 @@ def create_one_city(state_id):
 
 @app_views.route("/cities/<city_id>", methods=["PUT"], strict_slashes=False)
 def update_one_city(city_id):
+    """Example endpoint updates one city
+    Updates one city tied with the given state_id based on the JSON body
+    ---
+    parameters:
+      - name: city_id
+        in: path
+        type: string
+        enum: ['None', "1da255c0-f023-4779-8134-2b1b40f87683"]
+        required: true
+        default: None
+    definitions:
+      City:
+        type: object
+        properties:
+          __class__:
+            type: string
+            description: The string of class object
+          created_at:
+            type: string
+            description: The date the object created
+          id:
+            type: string
+            description: the id of the city
+          name:
+            type: string
+            description: name of the city
+          state_id:
+            type: string
+            description: the id of the state
+          updated_at:
+            type: string
+            description: The date the object was updated
+            items:
+              $ref: '#/definitions/Color'
+      Color:
+        type: string
+    responses:
+      200:
+        description: A list of a dictionary of a city object
+        schema:
+          $ref: '#/definitions/City'
+        examples:
+            [{"__class__": "City", "created_at": "2017-03-25T02:17:06",
+              "id": "1da255c0-f023-4779-8134-2b1b40f87683",
+              "name": "New Orleans",
+              "state_id": "2b9a4627-8a9e-4f32-a752-9a84fa7f4efd",
+              "updated_at": "2017-03-25T02:17:06"}]
+    """
     city = storage.get("City", city_id)
     if city is None:
         abort(404)
