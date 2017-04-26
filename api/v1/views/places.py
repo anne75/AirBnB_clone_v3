@@ -496,7 +496,8 @@ def list_places():
     if all_cities_id or all_amenities:
         all_places2 = storage.all("Place").values()
         if all_cities_id:
-            all_places2 = [p for p in all_places2 if p.city_id in all_cities_id]
+            all_places2 = [p for p in all_places2 if
+                           p.city_id in all_cities_id]
         if all_amenities:
             if os.getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
                 all_places = [p for p in all_places2 if
