@@ -297,7 +297,6 @@ class TestPlaceAmenityViewFS(unittest.TestCase):
             self.path, self.place.id, amenity.id),
                           follow_redirects=True)
         self.assertEqual(rv.status_code, 201)
-        self.assertEqual(rv.headers.get("Content-Type"), "application/json")
         json_format = getJson(rv)
         self.assertEqual(json_format.get("name"), amenity_args["name"])
         self.assertEqual(json_format.get("id"), amenity_args["id"])

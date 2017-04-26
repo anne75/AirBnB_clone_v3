@@ -4,6 +4,7 @@ This is module places
 """
 from api.v1.views import (app_views, Place, storage)
 from flask import (abort, jsonify, make_response, request)
+import os
 
 
 @app_views.route('/cities/<city_id>/places', methods=['GET'],
@@ -106,5 +107,22 @@ def list_places():
     if all_cities is not None:
         all_places = [p for p in all_places if p.city_id in all_cities]
     if all_amenities is not None:
-        all_places = [p for p in all_places if p.amenities == all_amenities]
-    return jsonify([p.to_json() for p in all_places])
+        if os.getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
+            all_places = [p for p in all_places if
+                          set(all_amenities) <= set(p.amenities_id)]
+        else:
+            tmp = all_places[:]
+            all_places = []
+            for e in tmp:
+                flag = True
+                for a in all_amenities:
+                    if a not in [i.id for i in e.amenities]:
+                        flag = False
+                        break
+                if flag:
+                    # using amenities make it instance attribute,
+                    # not just class
+                    e.__dict__.pop("amenities", None)
+                    all_places.append(e)
+    res = [e.to_json() for e in all_places]
+    return jsonify(res)

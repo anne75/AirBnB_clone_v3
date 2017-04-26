@@ -95,6 +95,7 @@ class Place(BaseModel, Base):
             result = [r for r in all_reviews if r.place_id == self.id]
             return result
 
+    if getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
         @property
         def amenities(self):
             """
