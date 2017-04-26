@@ -8,7 +8,34 @@ from flask import (abort, jsonify, make_response, request)
 
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
 def view_all_states():
-    """list all states objects"""
+    """Example endpoint returning a list of colors by palette
+    This is using docstrings for specifications.
+    ---
+    parameters:
+      - name: palette
+        in: path
+        type: string
+        enum: ['all', 'rgb', 'cmyk']
+        required: true
+        default: all
+    definitions:
+      Palette:
+        type: object
+        properties:
+          palette_name:
+            type: array
+            items:
+              $ref: '#/definitions/Color'
+      Color:
+        type: string
+    responses:
+      200:
+        description: A list of colors (may be filtered by palette)
+        schema:
+          $ref: '#/definitions/Palette'
+        examples:
+          rgb: ['red', 'green', 'blue']
+    """
     all_states = [state.to_json() for state in storage.all("State").values()]
     return jsonify(all_states)
 
