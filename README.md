@@ -10,14 +10,37 @@ Build an API. To implement, run the API module. Current implmentation requires a
 
 Run at the root of the folder
 <pre><code>
-HBNB_MYSQL_USER=hbnb_dev HBNB_MYSQL_PWD=hbnb_dev_pwd HBNB_MYSQL_HOST=localhost HBNB_MYSQL_DB=hbnb_dev_db HBNB_TYPE_STORAGE=db HBNB_API_HOST=0.0.0.0 HBNB_API_PORT=5000 python3 -m api.v1.app
+>>> HBNB_MYSQL_USER=hbnb_dev HBNB_MYSQL_PWD=hbnb_dev_pwd HBNB_MYSQL_HOST=localhost HBNB_MYSQL_DB=hbnb_dev_db HBNB_TYPE_STORAGE=db HBNB_API_HOST=0.0.0.0 HBNB_API_PORT=5000 python3 -m api.v1.app
 </code></pre>
 Expected response:
 <pre><code>
  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
 ...
 </code></pre>
- A list of all the possible routes are avaiable on Flassger's application, here. <a href="http://0.0.0.0:5000/apidocs/">here</a>. 
+A list of all the possible routes and their respective routes are avaiable on Flassger's application, <a href="http://0.0.0.0:5000/apidocs/">here</a>. 
+
+Input route for specific api request and avaliable route below.
+
+http://0.0.0.0:5000/api/v1/{Route}
+
+| Route                                    | Request            |
+|------------------------------------------|--------------------|
+| states                                   | [GET, POST]        |
+| states/<state_id>                        | [GET, DELETE, PUT] |
+| states/<state_id>/cities                 | [GET, POST]        |
+| cities/<city_id>                         | [GET, DELETE. PUT] |
+| amenities                                | [GET, POST]        |
+| amenities/<amenity_ids>                  | [GET, DELETE, PUT] |
+| users                                    | [GET, POST]        |
+| users/<user_id>                          | [GET, DELETE, PUT  |
+| cities/<city_id>/places                  | [GET, POST]        |
+| places/<place_id>                        | [GET, DELETE, PUT] |
+| places/<place_id>/amenities              | [GET, DELETE]      |
+| places/<place_id>/amenities/<amenity_id> | [POST]             |
+| places/<place_id>/reviews                | [GET, POST]        |
+| reviews/<review_id>                      | [GET, DELETE, PUT] |
+| places                                   | [POST]             |
+
 
 <h4>second phase</h4>
 Command line interpretor can now save objects into a mysql database by setting the following environmental variables. The database schema is <a href="https://s3.amazonaws.com/intranet-projects-files/holbertonschool-higher-level_programming+/289/AirBnb_DB_diagramm.jpg">here</a> and below.
