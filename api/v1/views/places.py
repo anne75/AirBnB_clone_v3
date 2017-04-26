@@ -492,19 +492,16 @@ def list_places():
     all_cities_id = list(set(all_cities_id))
 
     all_amenities = r.get("amenities")
-    if not (all_cities_id or all_amenities):
-        all_places = []
-        return jsonify({"A": all_amenities})
-    else:
+    all_places = []
+    if all_cities_id or all_amenities:
         all_places2 = storage.all("Place").values()
         if all_cities_id:
-            all_places2 = [p for p in all_places if p.city_id in all_cities_id]
+            all_places2 = [p for p in all_places2 if p.city_id in all_cities_id]
         if all_amenities:
             if os.getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
                 all_places = [p for p in all_places2 if
                               set(all_amenities) <= set(p.amenities_id)]
             else:
-                all_places = []
                 for e in all_places2:
                     flag = True
                     for a in all_amenities:
@@ -515,5 +512,7 @@ def list_places():
                                 # using amenities make it instance attribute,
                                 # not just class check out to_json
                         all_places.append(e)
+        else:
+            all_places = all_places2
     return jsonify([p.to_json() for p in all_places])
 # what to do for junk states, cities, amenities
