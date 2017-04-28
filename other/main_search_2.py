@@ -12,7 +12,7 @@ if __name__ == "__main__":
     
     amenity_ids = []
     for amenity_j in r_j:
-        if amenity_j.get('name') == "Internet" or amenity_j.get('name') == "Wireless Internet":
+        if amenity_j.get('name') == "Wifi" or amenity_j.get('name') == "Ethernet":
             amenity_ids.append(amenity_j.get('id'))
                     
     """ POST /api/v1/places_search
