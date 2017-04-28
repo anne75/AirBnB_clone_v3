@@ -12,7 +12,7 @@ if __name__ == "__main__":
     
     amenity_id = None
     for amenity_j in r_j:
-        if amenity_j.get('name') == "Wireless Internet":
+        if amenity_j.get('name') == "Wifi":
             amenity_id = amenity_j.get('id')
             break
                     

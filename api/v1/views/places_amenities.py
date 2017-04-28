@@ -157,7 +157,7 @@ if getenv('HBNB_TYPE_STORAGE', 'fs') != 'db':
             return "Bad amenity", 404
         if amenity_id in place.amenities_id:
             return jsonify(amenity.to_json()), 200
-        place.amenities.append(amenity_id)
+        place.amenities_id.append(amenity_id)
         place.save()
         return jsonify(amenity.to_json()), 201
 

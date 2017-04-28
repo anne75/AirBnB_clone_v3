@@ -24,7 +24,7 @@ class HBNBCommand(cmd.Cmd):
         valid_classes: all the classes currently handled by the
         interpreter
     """
-    prompt = '(hbnb)'
+    prompt = '(hbnb) '
     # storage.reload()
     valid_classes = {"BaseModel": BaseModel, "User": User,
                      "Amenity": Amenity, "City": City, "Place": Place,
