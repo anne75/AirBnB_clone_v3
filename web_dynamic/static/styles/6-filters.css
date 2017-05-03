@@ -1,5 +1,5 @@
 .container {
-    max-width: 1000px;
+1;4205;0c    max-width: 1000px;
     margin: 30px auto;
     min-height: 100%;
 }
@@ -57,6 +57,10 @@ h2, h3, h4 {
     font-weight: 400;
     font-size: 14px;
     line-height: 0%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    height: 100%;
 }
 
 ul {
@@ -102,4 +106,8 @@ ul {
 
 .amenities:hover .popover {
     display: block;
+}
+
+.amenities input {
+    margin-right: 10px;
 }
