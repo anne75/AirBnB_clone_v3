@@ -11,7 +11,7 @@ from os import getenv
 
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
+CORS(app, origins="0.0.0.0")
 app.register_blueprint(app_views)
 Swagger(app)
 
